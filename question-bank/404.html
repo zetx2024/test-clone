@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proshtuti - Question Bank Solving</title>
+    <title>Quiz Application</title>
     <style>
-      body {
+        body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
@@ -13,16 +13,28 @@
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     background: white;
-    padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.fixed-header {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
 h1 {
     text-align: center;
+    margin-top: 60px; /* Space for fixed timer */
 }
 
 .question {
@@ -38,38 +50,52 @@ h1 {
     margin: 10px 0;
 }
 
+.correct {
+    background-color: #d4edda;
+}
+
+.wrong {
+    background-color: #f8d7da;
+}
+
 .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    text-align: center;
 }
 
 .submit-btn {
     padding: 10px 15px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%;
 }
 
 .submit-btn:hover {
-    background-color: #218838;
+    background-color: #0056b3;
 }
 
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Test Question Bank Solving</h1>
+        <div id="timer" class="fixed-header">
+            Time Remaining: <span id="time">60:00</span>
+        </div>
+        <h1>Quiz Application</h1>
         <div id="quiz"></div>
         <div class="footer">
-            <div id="timer">Time Remaining: <span id="time">60:00</span></div>
             <button id="submit" class="submit-btn">Submit</button>
         </div>
     </div>
     <script>
-      const quizData = [
+        const quizData = [
     {
         question: "What is the capital of France?",
         answers: {
@@ -91,34 +117,35 @@ h1 {
         },
         correct: "b",
         explanation: "Mars is known as the Red Planet due to its reddish appearance."
-    }
+    },
+    // Add more questions as needed
 ];
 
-let currentQuestion = 0;
 let score = 0;
 let timer;
 let timeRemaining = 60 * 60; // 60 minutes in seconds
 
 function loadQuiz() {
     const questionContainer = document.getElementById('quiz');
-    const currentQuizData = quizData[currentQuestion];
-    questionContainer.innerHTML = `
-        <div class="question">${currentQuizData.question}</div>
-        <ul class="answers">
-            ${Object.keys(currentQuizData.answers).map(key => `
-                <li>
-                    <input type="radio" name="answer" id="${key}" value="${key}">
-                    <label for="${key}">${currentQuizData.answers[key]}</label>
-                </li>
-            `).join('')}
-        </ul>
-    `;
+    questionContainer.innerHTML = quizData.map((q, index) => `
+        <div class="question">
+            <h3>Question ${index + 1}: ${q.question}</h3>
+            <ul class="answers">
+                ${Object.keys(q.answers).map(key => `
+                    <li>
+                        <input type="radio" name="question${index}" id="q${index}${key}" value="${key}">
+                        <label for="q${index}${key}">${q.answers[key]}</label>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `).join('');
 }
 
 function showResult() {
     const questionContainer = document.getElementById('quiz');
     questionContainer.innerHTML = `
-        <h2>Your Score: ${score}/${quizData.length}</h2>
+        <h2>Your Score: ${score}/${quizData.length} (${((score / quizData.length) * 100).toFixed(2)}%)</h2>
         ${quizData.map((q, index) => `
             <div>
                 <h3>Question ${index + 1}: ${q.question}</h3>
@@ -130,22 +157,26 @@ function showResult() {
 }
 
 function submitQuiz() {
-    const answers = document.querySelectorAll('input[name="answer"]');
-    answers.forEach((answer) => {
-        if (answer.checked) {
-            if (answer.value === quizData[currentQuestion].correct) {
+    quizData.forEach((q, index) => {
+        const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selectedAnswer) {
+            if (selectedAnswer.value === q.correct) {
                 score++;
+                selectedAnswer.parentElement.classList.add('correct');
+            } else {
+                selectedAnswer.parentElement.classList.add('wrong');
+            }
+        } else {
+            // If no answer was selected, mark it wrong (optional)
+            const correctOption = document.querySelector(`input[name="question${index}"][value="${q.correct}"]`);
+            if (correctOption) {
+                correctOption.parentElement.classList.add('correct');
             }
         }
     });
 
-    currentQuestion++;
-    if (currentQuestion < quizData.length) {
-        loadQuiz();
-    } else {
-        clearInterval(timer);
-        showResult();
-    }
+    clearInterval(timer);
+    showResult();
 }
 
 function startTimer() {
