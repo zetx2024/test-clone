@@ -1,0 +1,3957 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HSC, Admission ও BCS এর সেরা প্রস্তুতি - প্রস্তুতি</title>
+  <meta name="description" content="Responsive quiz app with daily practice, exam mode, classes/subjects/topics, MathJax formulas, Chart.js results, and localStorage tracking." />
+
+  <!-- Fonts (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- MathJax for LaTeX/MathML rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' },
+      options: { renderActions: { addMenu: [] } }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0b0b0b;
+      --muted: #5a5a5a;
+      --card: #f6f6f6;
+      --accent: #e11d48; /* red */
+      --accent-weak: #fee2e2;
+      --border: #e5e7eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0b0b; /* black */
+        --fg: #f8fafc; /* white-ish */
+        --muted: #9aa0a6;
+        --card: #151515;
+        --accent: #e11d48; /* red */
+        --accent-weak: #3f0d16;
+        --border: #222;
+      }
+    }
+    html[data-theme="light"]:root {
+      --bg: #ffffff; --fg: #0b0b0b; --muted: #5a5a5a; --card: #f6f6f6; --accent: #e11d48; --accent-weak: #fee2e2; --border: #e5e7eb;
+    }
+    html[data-theme="dark"]:root {
+      --bg: #0b0b0b; --fg: #f8fafc; --muted: #9aa0a6; --card: #151515; --accent: #e11d48; --accent-weak: #3f0d16; --border: #222;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      background: var(--bg); color: var(--fg); min-height: 100dvh;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Top Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(120%) blur(6px);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: .8rem 1rem; }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; letter-spacing: .2px; }
+    .brand .badge { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; color: white; font-weight: 800; }
+    .tabs { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .tab { padding: .5rem .75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-weight: 600; }
+    .tab.active, .tab:hover { color: var(--fg); border-color: var(--accent); }
+
+    .right { display: flex; align-items: center; gap: .5rem; }
+    .btn, button {
+      background: var(--accent); color: white; border: none; padding: .6rem .9rem; border-radius: .8rem; font-weight: 700;
+      box-shadow: 0 6px 18px -8px var(--accent);
+    }
+    .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--border); box-shadow: none; }
+    .btn.ghost:hover { border-color: var(--accent); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+    .grid { display: grid; gap: 1rem; }
+    @media (min-width: 640px) { .grid.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (min-width: 900px) { .grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 1rem; padding: 1rem; }
+    .card:hover { outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+    .thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg, var(--accent-weak), transparent); border-radius: .8rem; border: 1px dashed var(--border); display: grid; place-items: center; font-weight: 800; }
+
+    .section-title { display: flex; align-items: center; justify-content: space-between; margin: 1rem 0 .5rem; }
+    .muted { color: var(--muted); }
+    .pill { display: inline-flex; gap: .4rem; align-items: center; font-size: .85rem; padding: .25rem .6rem; border: 1px solid var(--border); border-radius: 999px; }
+
+    /* Modal */
+    dialog { border: 1px solid var(--border); border-radius: 1rem; max-width: 680px; width: calc(100% - 2rem); background: var(--bg); color: var(--fg); }
+    dialog::backdrop { background: color-mix(in srgb, black 30%, transparent); }
+
+    /* Quiz */
+    .q-title { font-weight: 700; font-size: 1.05rem; margin-bottom: .6rem; }
+    .answers { display: grid; gap: .6rem; }
+    .answer { border: 1px solid var(--border); background: #0000; padding: .75rem .9rem; border-radius: .8rem; display: flex; gap: .7rem; align-items: start; }
+    .answer input { margin-top: .3rem; }
+    .answer.correct { border-color: #22c55e88; background: color-mix(in srgb, #22c55e 10%, transparent); }
+    .answer.wrong   { border-color: #ef444488; background: color-mix(in srgb, #ef4444 10%, transparent); }
+
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .85rem; }
+
+    footer { padding: 3rem 1rem; color: var(--muted); text-align: center; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand"><div class="badge">প্রস্তুতি</div></div>
+      <div class="tabs" id="navTabs">
+        <a href="#home"    class="tab" data-route>Home</a>
+        <a href="#classes" class="tab" data-route>Classes</a>
+        <a href="#exam"    class="tab" data-route>Exam</a>
+        <a href="#results" class="tab" data-route>Results</a>
+      </div>
+      <div class="right">
+        <select id="themeSelect" class="btn ghost" title="Theme">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+        <button id="resetDaily" class="btn ghost" title="Debug: reset daily limit">Reset Daily</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- HOME -->
+    <section id="home" data-view>
+      <div class="section-title">
+        <h2>Daily Practice</h2>
+        <span class="pill">10 Q • once per day</span>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="thumb">DAILY • 10Q</div>
+          <h3>Today’s Random Quiz</h3>
+          <p class="muted">A fresh set of 10 mixed questions from the full bank. Come back each day to keep your streak!</p>
+          <div style="display:flex; gap:.6rem; margin-top:.6rem; align-items:center;">
+            <button id="startDailyBtn">Start today’s quiz</button>
+            <span class="muted" id="dailyStatus"></span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="thumb">TRACK</div>
+          <h3>Progress Summary</h3>
+          <p class="muted">Your recent attempts will appear here. View detailed analytics on the Results page.</p>
+          <canvas id="homeSummaryChart" height="160"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSES / SUBJECTS / TOPICS -->
+    <section id="classes" data-view hidden>
+      <div class="section-title"><h2>Classes</h2><span class="muted">Browse by class → subject → topic</span></div>
+      <div id="classesGrid" class="grid cols-3"></div>
+    </section>
+
+    <section id="subjects" data-view hidden>
+      <div class="section-title"><h2 id="subjectsTitle">Subjects</h2><a href="#classes" class="pill">← Back</a></div>
+      <div id="subjectsGrid" class="grid cols-3"></div>
+    </section>
+
+    <section id="topics" data-view hidden>
+      <div class="section-title"><h2 id="topicsTitle">Topics</h2><a href="#subjects" class="pill">← Back</a></div>
+      <div id="topicsGrid" class="grid cols-3"></div>
+    </section>
+
+    <!-- EXAM -->
+    <section id="exam" data-view hidden>
+      <div class="section-title"><h2>Exam Mode</h2><span class="muted">Unlimited attempts</span></div>
+      <div class="card">
+        <div class="grid">
+          <div>
+            <label>Class</label>
+            <select id="examClass"></select>
+          </div>
+          <div>
+            <label>Subject</label>
+            <select id="examSubject"></select>
+          </div>
+          <div>
+            <label>Topic</label>
+            <select id="examTopic"></select>
+          </div>
+          <div>
+            <label>Question Count</label>
+            <input id="examCount" type="number" min="5" max="50" value="20" class="kbd" />
+          </div>
+          <div>
+            <button id="startExamBtn">Start Exam</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ RUNNER -->
+    <section id="quiz" data-view hidden>
+      <div class="section-title"><h2 id="quizTitle">Quiz</h2><span id="quizMeta" class="pill">Q <span id="qIndex">1</span>/<span id="qTotal">10</span></span></div>
+      <div id="quizCard" class="card">
+        <div id="questionText" class="q-title"></div>
+        <div class="answers" id="answers"></div>
+        <div id="explanation" class="muted" style="margin-top:.8rem; display:none;"></div>
+        <div style="display:flex; gap:.6rem; margin-top:1rem;">
+          <button id="prevBtn" class="btn ghost">Prev</button>
+          <button id="nextBtn">Next</button>
+          <button id="submitBtn" class="btn ghost" style="margin-left:auto;">Submit Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" data-view hidden>
+      <div class="section-title"><h2>Results & Analytics</h2><span class="muted">Your attempts are saved on this device</span></div>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Score Trends</h3>
+          <canvas id="resultsChart" height="180"></canvas>
+        </div>
+        <div class="card">
+          <h3>Attempts</h3>
+          <div id="attemptsList" class="grid"></div>
+        </div>
+      </div>
+      <div id="attemptDetail" class="card" hidden>
+        <h3>Attempt Detail</h3>
+        <div id="attemptMeta" class="muted" style="margin-bottom:.5rem;"></div>
+        <div id="attemptItems"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    HSC, Admission ও BCS এর সেরা প্রস্তুতি - প্রস্তুতি
+  </footer>
+
+  <!-- Daily modal (optional UX) -->
+  <dialog id="dailyDialog">
+    <form method="dialog" style="padding:1rem;">
+      <h3 style="margin-top:0;">Today’s Quiz</h3>
+      <p class="muted">You can take one 10-question quiz per day. Ready?</p>
+      <div style="display:flex; gap:.5rem; justify-content:flex-end;">
+        <button class="btn ghost" value="cancel">Cancel</button>
+        <button class="btn" value="ok">Start</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+  /*****************************************************
+   * SAMPLE QUESTION BANK (in one JSON-like object)
+   * Replace with fetch('questions.json').then(r=>r.json())
+   *****************************************************/
+  const QUESTION_DB = [
+    
+  {
+    id: 'BIO-2010-001',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'কোন অঙ্গাণু কোষের পাওয়ার হাউস নামে পরিচিত?',
+    options: ['নিউক্লিয়াস', 'মাইটোকন্ড্রিয়া', 'রাইবোজোম', 'গলগি বডি'],
+    correct: [1],
+    explanation: 'মাইটোকন্ড্রিয়া শ্বাসক্রিয়ার মাধ্যমে শক্তি (ATP) উৎপন্ন করে।',
+    tags: ['biology','2010']
+  },
+  {
+    id: 'BIO-2010-002',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'রক্ত',
+    question: 'মানবদেহে লোহিত রক্তকণিকার আয়ু কতদিন?',
+    options: ['৬০ দিন', '৯০ দিন', '১২০ দিন', '১৮০ দিন'],
+    correct: [2],
+    explanation: 'লোহিত রক্তকণিকার গড় আয়ু প্রায় ১২০ দিন।',
+    tags: ['biology','2010']
+  },
+  {
+    id: 'CHEM-2010-003',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'সোডিয়াম কোন গ্রুপের মৌল?',
+    options: ['গ্রুপ-১', 'গ্রুপ-২', 'গ্রুপ-১৩', 'গ্রুপ-১৭'],
+    correct: [0],
+    explanation: 'সোডিয়াম ক্ষার ধাতু, এটি পর্যায় সারণির গ্রুপ-১ এ অবস্থিত।',
+    tags: ['chemistry','2010']
+  },
+  {
+    id: 'CHEM-2010-004',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'pH = ৭ হলে দ্রবণটি কেমন হবে?',
+    options: ['অম্লীয়', 'ক্ষারীয়', 'নিরপেক্ষ', 'ক্ষারক'],
+    correct: [2],
+    explanation: 'pH = ৭ মানে দ্রবণটি নিরপেক্ষ।',
+    tags: ['chemistry','2010']
+  },
+  {
+    id: 'PHY-2010-005',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'গতিবিদ্যা',
+    question: 'শূন্যস্থানে আলোর বেগ প্রায় কত?',
+    options: ['৩×১০^৫ m/s', '৩×১০^৬ m/s', '৩×১০^৮ m/s', '৩×১০^৯ m/s'],
+    correct: [2],
+    explanation: 'আলোর বেগ ≈ ৩×১০^৮ m/s।',
+    tags: ['physics','2010']
+  },
+  {
+    id: 'PHY-2010-006',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'শক্তি সৃষ্টি বা বিনষ্ট হয় না – এটি কোন সূত্র?',
+    options: ['শূন্যতম সূত্র', 'প্রথম সূত্র', 'দ্বিতীয় সূত্র', 'চার্লস সূত্র'],
+    correct: [1],
+    explanation: 'তাপগতিবিদ্যার প্রথম সূত্র শক্তির নিত্যতা নির্দেশ করে।',
+    tags: ['physics','2010']
+  },
+  {
+    id: 'ENG-2010-007',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Rapid” শব্দের সমার্থক কোনটি?',
+    options: ['Slow', 'Fast', 'Calm', 'Weak'],
+    correct: [1],
+    explanation: 'Rapid = Fast (দ্রুত)।',
+    tags: ['english','2010']
+  },
+  {
+    id: 'ENG-2010-008',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'Choose the correct sentence:',
+    options: ['He go to school.', 'He goes to school.', 'He going to school.', 'He gone to school.'],
+    correct: [1],
+    explanation: 'Present simple tense-এ third person singular এ verb+s/es হয়।',
+    tags: ['english','2010']
+  },
+  {
+    id: 'GK-2010-009',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের মুক্তিযুদ্ধ কত সালে সংঘটিত হয়?',
+    options: ['১৯৬৫', '১৯৭১', '১৯৭৫', '১৯৮১'],
+    correct: [1],
+    explanation: 'বাংলাদেশের মুক্তিযুদ্ধ ১৯৭১ সালে সংঘটিত হয়।',
+    tags: ['gk','2010']
+  },
+  {
+    id: 'GK-2010-010',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'সংবিধান',
+    question: 'বাংলাদেশ সংবিধান কবে কার্যকর হয়?',
+    options: ['১৯৭১', '১৯৭২', '১৯৭৫', '১৯৮০'],
+    correct: [1],
+    explanation: 'বাংলাদেশ সংবিধান ১৬ ডিসেম্বর ১৯৭২ থেকে কার্যকর হয়।',
+    tags: ['gk','2010']
+  },
+  {
+    id: 'BIO-2010-011',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'মানবদেহে কোন হরমোন রক্তে শর্করা নিয়ন্ত্রণ করে?',
+    options: ['ইনসুলিন', 'অ্যাড্রেনালিন', 'থাইরক্সিন', 'গ্রোথ হরমোন'],
+    correct: [0],
+    explanation: 'ইনসুলিন রক্তে গ্লুকোজের মাত্রা নিয়ন্ত্রণ করে।',
+    tags: ['biology','2010']
+  },
+  {
+    id: 'BIO-2010-012',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'উদ্ভিদের কোন টিস্যু জল পরিবহন করে?',
+    options: ['ফ্লোএম', 'জাইলেম', 'কর্ক', 'ক্যাম্বিয়াম'],
+    correct: [1],
+    explanation: 'জাইলেম মূল থেকে পাতা পর্যন্ত জল পরিবহন করে।',
+    tags: ['biology','2010']
+  },
+  {
+    id: 'CHEM-2010-013',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'রাসায়নিক বন্ধন',
+    question: 'NaCl এ কোন ধরনের বন্ধন বিদ্যমান?',
+    options: ['আয়নিক', 'কোভালেন্ট', 'মেটালিক', 'ভ্যান ডার ওয়ালস'],
+    correct: [0],
+    explanation: 'NaCl একটি আয়নিক যৌগ।',
+    tags: ['chemistry','2010']
+  },
+  {
+    id: 'CHEM-2010-014',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'গ্যাস সূত্র',
+    question: 'PV = nRT কোন সূত্র?',
+    options: ['বয়েল সূত্র', 'চার্লস সূত্র', 'গ্যাসের সাধারণ সূত্র', 'আভোগাড্রো সূত্র'],
+    correct: [2],
+    explanation: 'এটি Ideal Gas Equation।',
+    tags: ['chemistry','2010']
+  },
+  {
+    id: 'PHY-2010-015',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ওহমের সূত্র কী?',
+    options: ['V = IR', 'P = VI', 'F = ma', 'Q = mcΔT'],
+    correct: [0],
+    explanation: 'ওহমের সূত্র অনুযায়ী V = IR।',
+    tags: ['physics','2010']
+  },
+  {
+    id: 'PHY-2010-016',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোর প্রতিসরণ',
+    question: 'আলো বায়ু থেকে জলে প্রবেশ করলে কী ঘটে?',
+    options: ['গতি বৃদ্ধি পায়', 'গতি হ্রাস পায়', 'গতি অপরিবর্তিত থাকে', 'আলো অদৃশ্য হয়'],
+    correct: [1],
+    explanation: 'আলো ঘন মাধ্যম প্রবেশ করলে গতি কমে যায়।',
+    tags: ['physics','2010']
+  },
+  {
+    id: 'ENG-2010-017',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Tense',
+    question: 'She ____ to school every day.',
+    options: ['go', 'goes', 'going', 'gone'],
+    correct: [1],
+    explanation: 'Third person singular present tense → goes।',
+    tags: ['english','2010']
+  },
+  {
+    id: 'ENG-2010-018',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Article',
+    question: 'Choose the correct article: He is ____ honest man.',
+    options: ['a', 'an', 'the', 'no article'],
+    correct: [1],
+    explanation: 'Honest শব্দটি vowel sound দিয়ে শুরু → an।',
+    tags: ['english','2010']
+  },
+  {
+    id: 'GK-2010-019',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'জাতিসংঘের সদর দপ্তর কোথায়?',
+    options: ['প্যারিস', 'নিউইয়র্ক', 'লন্ডন', 'জেনেভা'],
+    correct: [1],
+    explanation: 'জাতিসংঘ সদর দপ্তর নিউইয়র্কে অবস্থিত।',
+    tags: ['gk','2010']
+  },
+  {
+    id: 'GK-2010-020',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের প্রথম রাষ্ট্রপতি কে?',
+    options: ['শেখ মুজিবুর রহমান', 'জিয়াউর রহমান', 'সৈয়দ নজরুল ইসলাম', 'খন্দকার মোশতাক আহমেদ'],
+    correct: [0],
+    explanation: 'বাংলাদেশের প্রথম রাষ্ট্রপতি ছিলেন বঙ্গবন্ধু শেখ মুজিবুর রহমান।',
+    tags: ['gk','2010']
+  },
+    {
+    id: 'BIO-2010-021',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জিনতত্ত্ব',
+    question: 'ডিএনএ কোন অণুজীবে পাওয়া যায় না?',
+    options: ['ব্যাকটেরিয়া', 'ভাইরাস', 'প্রকৃতির কোষ', 'ফাঙ্গাস'],
+    correct: [1],
+    explanation: 'ভাইরাসে ডিএনএ বা আরএনএ থাকে, কিন্তু তারা কোষ নয়।',
+    tags: ['biology','2010','genetics']
+  },
+  {
+    id: 'BIO-2010-022',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'শারীরবিদ্যা',
+    question: 'মানব দেহের সবচেয়ে বড় গ্রন্থি কোনটি?',
+    options: ['থাইরয়েড', 'লিভার', 'পিটুইটারি', 'অগ্ন্যাশয়'],
+    correct: [1],
+    explanation: 'লিভার সবচেয়ে বড় অঙ্গ এবং গুরুত্বপূর্ণ গ্রন্থি।',
+    tags: ['biology','2010','physiology']
+  },
+  {
+    id: 'BIO-2010-023',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'থাইরয়েড হরমোনের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'শরীরের বৃদ্ধি ও বিপাক নিয়ন্ত্রণ', 'রক্ত জমাট বাঁধা', 'ইমিউন সিস্টেম সক্রিয় করা'],
+    correct: [1],
+    explanation: 'থাইরয়েড হরমোন বৃদ্ধি ও বিপাক নিয়ন্ত্রণ করে।',
+    tags: ['biology','2010','endocrine']
+  },
+  {
+    id: 'BIO-2010-024',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'নিউরোফিজিওলজি',
+    question: 'নিউরন দিয়ে কি প্রেরণ করা হয়?',
+    options: ['ইলেকট্রিক সিগন্যাল', 'রক্ত', 'প্রোটিন', 'হরমোন'],
+    correct: [0],
+    explanation: 'নিউরন স্নায়ু সিগন্যাল পরিবহন করে।',
+    tags: ['biology','2010','neurophysiology']
+  },
+  {
+    id: 'BIO-2010-025',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'ব্লাড প্লেটলেটের কাজ কী?',
+    options: ['ইমিউন সিস্টেম', 'রক্ত জমাট বাঁধা', 'অক্সিজেন পরিবহন', 'হরমোন উৎপাদন'],
+    correct: [1],
+    explanation: 'প্লেটলেট রক্ত জমাট বাঁধা (clotting) প্রক্রিয়ায় অংশ নেয়।',
+    tags: ['biology','2010','hematology']
+  },
+  {
+    id: 'CHEM-2010-026',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অজৈব',
+    question: 'H₂SO₄ কোন ধরনের অম্ল?',
+    options: ['দৃঢ়', 'দুর্বল', 'নিরপেক্ষ', 'অ্যালকাইন'],
+    correct: [0],
+    explanation: 'H₂SO₄ শক্তিশালী অম্ল।',
+    tags: ['chemistry','2010','inorganic']
+  },
+  {
+    id: 'CHEM-2010-027',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'কার্বন-এর আয়ন কি?',
+    options: ['C⁺', 'C⁻', 'C²⁺', 'C³⁺'],
+    correct: [1],
+    explanation: 'কার্বন সাধারণত আয়ন হিসেবে C⁻ ধারণ করে।',
+    tags: ['chemistry','2010','organic']
+  },
+  {
+    id: 'CHEM-2010-028',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'ফিজিক্যাল',
+    question: 'ওজন ও ভরের সম্পর্ক কী?',
+    options: ['W = m × g', 'W = m / g', 'W = g / m', 'W = m² × g'],
+    correct: [0],
+    explanation: 'ওজন = ভর × মাধ্যাকর্ষণ ত্বরণ।',
+    tags: ['chemistry','2010','physical']
+  },
+  {
+    id: 'CHEM-2010-029',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেম',
+    question: 'প্রোটিনের মোনোমার কী?',
+    options: ['অ্যামিনো অ্যাসিড', 'গ্লুকোজ', 'নিউক্লিওটাইড', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'প্রোটিন অ্যামিনো অ্যাসিড থেকে গঠিত।',
+    tags: ['chemistry','2010','biochemistry']
+  },
+  {
+    id: 'PHY-2010-030',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'F = ma সূত্রে F কী বোঝায়?',
+    options: ['বেগ', 'শক্তি', 'বল', 'গতি'],
+    correct: [2],
+    explanation: 'বল = ভর × ত্বরণ।',
+    tags: ['physics','2010','mechanics']
+  },
+  {
+    id: 'PHY-2010-031',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'শব্দ তরঙ্গ কোন ধরনের?',
+    options: ['অনুদৈর্ঘ্য', 'আনুপ্রস্থ', 'উভয়', 'কোনোটিই নয়'],
+    correct: [0],
+    explanation: 'শব্দ তরঙ্গ অনুদৈর্ঘ্য তরঙ্গ।',
+    tags: ['physics','2010','waves']
+  },
+  {
+    id: 'PHY-2010-032',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিজ্ঞান ও প্রযুক্তি',
+    question: 'ক্যামেরায় f-number কী নির্দেশ করে?',
+    options: ['শাটার স্পিড', 'অ্যাপারচার অনুপাত', 'ISO', 'ফোকাল দৈর্ঘ্য'],
+    correct: [1],
+    explanation: 'f-number = ফোকাল দৈর্ঘ্য ÷ অ্যাপারচার ব্যাস।',
+    tags: ['physics','2010','optics']
+  },
+  {
+    id: 'ENG-2010-033',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Synonym',
+    question: '“Abundant” শব্দের সমার্থক কোনটি?',
+    options: ['Scarce', 'Plentiful', 'Rare', 'Tiny'],
+    correct: [1],
+    explanation: 'Abundant = plentiful (প্রচুর)।',
+    tags: ['english','2010','synonym']
+  },
+  {
+    id: 'ENG-2010-034',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Scarce” এর বিপরীতার্থক শব্দ কোনটি?',
+    options: ['Plentiful', 'Rare', 'Few', 'Sparse'],
+    correct: [0],
+    explanation: 'Scarce ↔ Plentiful।',
+    tags: ['english','2010','antonym']
+  },
+  {
+    id: 'ENG-2010-035',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'He ____ a book yesterday.',
+    options: ['read', 'reads', 'reading', 'has read'],
+    correct: [0],
+    explanation: 'Past tense: read।',
+    tags: ['english','2010','tense']
+  },
+  {
+    id: 'GK-2010-036',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের জাতীয় ফুল কোনটি?',
+    options: ['শাপলা', 'রজনীগন্ধা', 'টিউলিপ', 'গোলাপ'],
+    correct: [0],
+    explanation: 'জাতীয় ফুল: শাপলা।',
+    tags: ['gk','2010','bangladesh']
+  },
+  {
+    id: 'GK-2010-037',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিজ্ঞান',
+    question: 'মানবদেহের সবচেয়ে বড় অঙ্গ কোনটি?',
+    options: ['লিভার', 'ত্বক', 'মস্তিষ্ক', 'ফুসফুস'],
+    correct: [1],
+    explanation: 'শরীরের বৃহত্তম অঙ্গ: ত্বক।',
+    tags: ['gk','2010','science']
+  },
+  {
+    id: 'BIO-2010-038',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিস কোথায় হয়?',
+    options: ['স্ট্রোমা', 'থাইলাকয়েড', 'মাইটোকন্ড্রিয়া', 'নিউক্লিয়াস'],
+    correct: [1],
+    explanation: 'আলোক-পর্ব থাইলাকয়েডে হয়।',
+    tags: ['biology','2010','plant-physiology']
+  },
+  {
+    id: 'CHEM-2010-039',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'পিরিয়ডিক টেবিল-এ অ্যাক্টিনিয়াম কোন ব্লকে?',
+    options: ['s-block', 'p-block', 'd-block', 'f-block'],
+    correct: [3],
+    explanation: 'Actinides f-block-এ অন্তর্ভুক্ত।',
+    tags: ['chemistry','2010','periodic']
+  },
+  {
+    id: 'PHY-2010-040',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'কারেন্টের একক কী?',
+    options: ['ভোল্ট', 'অ্যাম্পিয়ার', 'ওহম', 'ওয়াট'],
+    correct: [1],
+    explanation: 'SI একক: অ্যাম্পিয়ার।',
+    tags: ['physics','2010','electricity']
+  },
+    {
+    id: 'BIO-2010-041',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'কোষের নিউক্লিয়াসের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'জিন নিয়ন্ত্রণ ও সংরক্ষণ', 'প্রোটিন সংশ্লেষ', 'জল পরিবহন'],
+    correct: [1],
+    explanation: 'নিউক্লিয়াস জিন নিয়ন্ত্রণ এবং DNA সংরক্ষণ করে।',
+    tags: ['biology','2010','cell-biology']
+  },
+  {
+    id: 'BIO-2010-042',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'অ্যাড্রেনালিন কোন গ্রন্থি থেকে নিঃসৃত হয়?',
+    options: ['থাইরয়েড', 'অগ্ন্যাশয়', 'পিটুইটারি', 'প্যানক্রিয়াস'],
+    correct: [1],
+    explanation: 'অ্যাড্রেনালিন অ্যাড্রিনাল গ্রন্থি থেকে নিঃসৃত হয়।',
+    tags: ['biology','2010','endocrine']
+  },
+  {
+    id: 'BIO-2010-043',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'রক্ত',
+    question: 'রক্তের কোন কোষ রোগ প্রতিরোধে সাহায্য করে?',
+    options: ['লোহিত কণিকা', 'শ্বেত রক্তকণিকা', 'প্লেটলেট', 'প্লাজমা'],
+    correct: [1],
+    explanation: 'শ্বেত রক্তকণিকা (WBC) রোগ প্রতিরোধে কাজ করে।',
+    tags: ['biology','2010','hematology']
+  },
+  {
+    id: 'BIO-2010-044',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে কতটি ক্রোমোজোম থাকে?',
+    options: ['৪৬', '৪৮', '৪৪', '৪০'],
+    correct: [0],
+    explanation: 'মানবদেহে ৪৬টি ক্রোমোজোম থাকে (২৩ জোড়া)।',
+    tags: ['biology','2010','genetics']
+  },
+  {
+    id: 'BIO-2010-045',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'হৃদয় কোন ধরণের পেশী দ্বারা গঠিত?',
+    options: ['স্মৃতিশক্তি পেশী', 'হার্ট পেশী', 'প্লেইন পেশী', 'স্মুথ পেশী'],
+    correct: [1],
+    explanation: 'হার্ট কার্ডিয়াক পেশী দ্বারা গঠিত।',
+    tags: ['biology','2010','physiology']
+  },
+  {
+    id: 'CHEM-2010-046',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'হিলিয়াম কোন গ্রুপে থাকে?',
+    options: ['গ্রুপ-১', 'গ্রুপ-২', 'গ্রুপ-১৮', 'গ্রুপ-১৭'],
+    correct: [2],
+    explanation: 'হিলিয়াম নোবেল গ্যাস, গ্রুপ-১৮।',
+    tags: ['chemistry','2010','periodic']
+  },
+  {
+    id: 'CHEM-2010-047',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaOH কোন ধরনের যৌগ?',
+    options: ['অম্ল', 'ক্ষার', 'নিরপেক্ষ', 'লবণ'],
+    correct: [1],
+    explanation: 'NaOH শক্তিশালী ক্ষার।',
+    tags: ['chemistry','2010','inorganic']
+  },
+  {
+    id: 'CHEM-2010-048',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'রাসায়নিক বন্ধন',
+    question: 'CO₂ এ কোন ধরনের বন্ধন রয়েছে?',
+    options: ['আয়নিক', 'কোভালেন্ট', 'মেটালিক', 'হাইড্রোজেন'],
+    correct: [1],
+    explanation: 'CO₂-এ দ্বৈত কোভালেন্ট বন্ধন থাকে।',
+    tags: ['chemistry','2010','bonding']
+  },
+  {
+    id: 'CHEM-2010-049',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'গ্লুকোজ কি ধরনের কার্বোহাইড্রেট?',
+    options: ['মোনোস্যাকারাইড', 'ডাইস্যাকারাইড', 'পলিস্যাকারাইড', 'লিপিড'],
+    correct: [0],
+    explanation: 'গ্লুকোজ একটি মোনোস্যাকারাইড।',
+    tags: ['chemistry','2010','biochemistry']
+  },
+  {
+    id: 'PHY-2010-050',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'যদি বেগ শূন্য হয়, তবে ত্বরণ কেমন হবে?',
+    options: ['শূন্য', 'ধনাত্মক', 'ঋণাত্মক', 'অপরিবর্তিত'],
+    correct: [0],
+    explanation: 'বেগ শূন্য হলে ত্বরণও শূন্য।',
+    tags: ['physics','2010','mechanics']
+  },
+  {
+    id: 'PHY-2010-051',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'দূরত্বের সাথে শব্দের বেগ কি পরিবর্তিত হয়?',
+    options: ['হ্যাঁ', 'না', 'শর্তসাপেক্ষে', 'অজানা'],
+    correct: [1],
+    explanation: 'শব্দের বেগ নির্দিষ্ট মাধ্যমের উপর নির্ভর করে, দূরত্বের নয়।',
+    tags: ['physics','2010','waves']
+  },
+  {
+    id: 'PHY-2010-052',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'আলো কোন তরঙ্গ?',
+    options: ['অনুদৈর্ঘ্য', 'আনুপ্রস্থ', 'দুই ধরনের', 'কোনোটিই নয়'],
+    correct: [1],
+    explanation: 'আলো আনুপ্রস্থ ইলেক্ট্রোম্যাগনেটিক তরঙ্গ।',
+    tags: ['physics','2010','optics']
+  },
+  {
+    id: 'ENG-2010-053',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Courage” শব্দের অর্থ কী?',
+    options: ['ভয়', 'সাহস', 'কঠিনতা', 'বুদ্ধিমত্তা'],
+    correct: [1],
+    explanation: 'Courage = সাহস।',
+    tags: ['english','2010','vocabulary']
+  },
+  {
+    id: 'ENG-2010-054',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'She ____ to the market yesterday.',
+    options: ['go', 'goes', 'went', 'gone'],
+    correct: [2],
+    explanation: 'Past tense: went।',
+    tags: ['english','2010','tense']
+  },
+  {
+    id: 'ENG-2010-055',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Happy” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Sad', 'Angry', 'Joyful', 'Excited'],
+    correct: [0],
+    explanation: 'Happy ↔ Sad।',
+    tags: ['english','2010','antonym']
+  },
+  {
+    id: 'GK-2010-056',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের স্বাধীনতার নেতা কে?',
+    options: ['শেখ মুজিবুর রহমান', 'জিয়াউর রহমান', 'সৈয়দ নজরুল ইসলাম', 'খন্দকার মোশতাক আহমেদ'],
+    correct: [0],
+    explanation: 'বঙ্গবন্ধু শেখ মুজিবুর রহমান স্বাধীনতার নেতা।',
+    tags: ['gk','2010','bangladesh']
+  },
+  {
+    id: 'GK-2010-057',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'জাতিসংঘ কবে প্রতিষ্ঠিত হয়?',
+    options: ['১৯৪৫', '১৯৩৯', '১৯৫০', '১৯৬০'],
+    correct: [0],
+    explanation: 'জাতিসংঘ ১৯৪৫ সালে প্রতিষ্ঠিত।',
+    tags: ['gk','2010','world']
+  },
+  {
+    id: 'BIO-2010-058',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'ফুসফুসে কোন গ্যাস শোষিত হয়?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'ফুসফুস থেকে রক্তে অক্সিজেন শোষিত হয়।',
+    tags: ['biology','2010','physiology']
+  },
+  {
+    id: 'CHEM-2010-059',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'রসায়ন',
+    question: 'পানি কোন ধরনের যৌগ?',
+    options: ['অম্ল', 'ক্ষার', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [3],
+    explanation: 'H₂O কোভালেন্ট যৌগ।',
+    tags: ['chemistry','2010','inorganic']
+  },
+  {
+    id: 'PHY-2010-060',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'রেজিস্টরের একক কী?',
+    options: ['ওহম', 'ভোল্ট', 'অ্যাম্পিয়ার', 'ওয়াট'],
+    correct: [0],
+    explanation: 'রেজিস্টরের SI একক: ওহম।',
+    tags: ['physics','2010','electricity']
+  },
+    {
+    id: 'BIO-2010-061',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'রাইবোজোমের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'প্রোটিন সংশ্লেষ', 'ডিএনএ সংরক্ষণ', 'লিপিড উৎপাদন'],
+    correct: [1],
+    explanation: 'রাইবোজোম প্রোটিন সংশ্লেষের জন্য দায়ী।',
+    tags: ['biology','2010','cell-biology']
+  },
+  {
+    id: 'BIO-2010-062',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'রক্তে হিমোগ্লোবিন কোন উপাদান বহন করে?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'হিমোগ্লোবিন অক্সিজেন বহন করে।',
+    tags: ['biology','2010','physiology']
+  },
+  {
+    id: 'BIO-2010-063',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'পিটুইটারি গ্রন্থি কোন হরমোন নিঃসৃত করে?',
+    options: ['থাইরয়েড হরমোন', 'গ্রোথ হরমোন', 'অ্যাড্রেনালিন', 'ইনসুলিন'],
+    correct: [1],
+    explanation: 'গ্রোথ হরমোন পিটুইটারি থেকে নিঃসৃত হয়।',
+    tags: ['biology','2010','endocrine']
+  },
+  {
+    id: 'BIO-2010-064',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানব দেহে X ক্রোমোজোমের সংখ্যা কত?',
+    options: ['১', '২', '২৩', '৪৬'],
+    correct: [1],
+    explanation: 'মানবদেহে সাধারণত ২টি X ক্রোমোজোম থাকে।',
+    tags: ['biology','2010','genetics']
+  },
+  {
+    id: 'BIO-2010-065',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'লোহিত রক্তকণিকার মূল কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রোগ প্রতিরোধ', 'রক্ত জমাট বাঁধা', 'পুষ্টি শোষণ'],
+    correct: [0],
+    explanation: 'লোহিত রক্তকণিকা অক্সিজেন পরিবহন করে।',
+    tags: ['biology','2010','hematology']
+  },
+  {
+    id: 'CHEM-2010-066',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'পানি-দ্রবীভূত HCl কোন ধরনের যৌগ?',
+    options: ['দুর্বল অম্ল', 'শক্তিশালী অম্ল', 'ক্ষার', 'নিরপেক্ষ'],
+    correct: [1],
+    explanation: 'HCl শক্তিশালী অম্ল।',
+    tags: ['chemistry','2010','inorganic']
+  },
+  {
+    id: 'CHEM-2010-067',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথানল কোন শ্রেণীর যৌগ?',
+    options: ['অ্যালকোহল', 'অ্যালডিহাইড', 'কেটোন', 'অ্যাসিড'],
+    correct: [0],
+    explanation: 'C₂H₅OH = ইথানল = অ্যালকোহল।',
+    tags: ['chemistry','2010','organic']
+  },
+  {
+    id: 'CHEM-2010-068',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেম',
+    question: 'এনজাইম কী?',
+    options: ['প্রোটিন', 'কার্বোহাইড্রেট', 'লিপিড', 'ভিটামিন'],
+    correct: [0],
+    explanation: 'এনজাইম প্রধানত প্রোটিন।',
+    tags: ['chemistry','2010','biochemistry']
+  },
+  {
+    id: 'PHY-2010-069',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'যদি একটি বস্তুর ভর দ্বিগুণ হয় এবং ত্বরণ অপরিবর্তিত থাকে, বল কেমন হবে?',
+    options: ['দ্বিগুণ', 'অর্ধেক', 'একই', 'শূন্য'],
+    correct: [0],
+    explanation: 'F = ma অনুযায়ী বল ভরের সঙ্গে সরাসরি অনুপাতযুক্ত।',
+    tags: ['physics','2010','mechanics']
+  },
+  {
+    id: 'PHY-2010-070',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'প্রকাশিত শব্দ তরঙ্গ কোন মাধ্যমে দ্রুত গতিশীল হয়?',
+    options: ['বায়ু', 'পানি', 'লোহা', 'শূন্যস্থান'],
+    correct: [2],
+    explanation: 'শব্দ তরঙ্গ কঠিন মাধ্যমে দ্রুত গতিশীল হয়।',
+    tags: ['physics','2010','waves']
+  },
+  {
+    id: 'PHY-2010-071',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলোর ভ্রান্তি ঘটায় কোন ঘটনা?',
+    options: ['রিফ্লেকশন', 'রিফ্রাকশন', 'ডিফ্র্যাকশন', 'ডোপলার'],
+    correct: [1],
+    explanation: 'আলো ভিন্ন মাধ্যমের সীমান্তে ভ্রান্তি (Refraction) ঘটে।',
+    tags: ['physics','2010','optics']
+  },
+  {
+    id: 'ENG-2010-072',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'She ____ playing football now.',
+    options: ['is', 'are', 'was', 'were'],
+    correct: [0],
+    explanation: 'Present continuous tense: is playing।',
+    tags: ['english','2010','tense']
+  },
+  {
+    id: 'ENG-2010-073',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Intelligent” এর সমার্থক শব্দ কোনটি?',
+    options: ['Smart', 'Dull', 'Weak', 'Lazy'],
+    correct: [0],
+    explanation: 'Intelligent = Smart।',
+    tags: ['english','2010','synonym']
+  },
+  {
+    id: 'ENG-2010-074',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Dark” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Bright', 'Dull', 'Lightless', 'Shade'],
+    correct: [0],
+    explanation: 'Dark ↔ Bright।',
+    tags: ['english','2010','antonym']
+  },
+  {
+    id: 'GK-2010-075',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের সর্বোচ্চ পর্বত কোনটি?',
+    options: ['ট্রাইঙ্গল', 'কাঞ্চনজঙ্ঘা', 'টেকনাফ', 'মহামায়া'],
+    correct: [1],
+    explanation: 'সর্বোচ্চ পর্বত: কাঞ্চনজঙ্ঘা।',
+    tags: ['gk','2010','bangladesh']
+  },
+  {
+    id: 'GK-2010-076',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে বড় মহাসাগর কোনটি?',
+    options: ['অ্যাটলান্টিক', 'প্যাসিফিক', 'ইন্ডিয়ান', 'আর্টিক'],
+    correct: [1],
+    explanation: 'প্যাসিফিক মহাসাগর সবচেয়ে বড়।',
+    tags: ['gk','2010','world']
+  },
+  {
+    id: 'BIO-2010-077',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসে কোন গ্যাস নিঃসৃত হয়?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'ফটোসিন্থেসিসে অক্সিজেন নিঃসৃত হয়।',
+    tags: ['biology','2010','plant-physiology']
+  },
+  {
+    id: 'CHEM-2010-078',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'সোডিয়াম কোন গ্রুপের ধাতু?',
+    options: ['গ্রুপ-১', 'গ্রুপ-২', 'গ্রুপ-১৩', 'গ্রুপ-১৭'],
+    correct: [0],
+    explanation: 'সোডিয়াম গ্রুপ-১ ক্ষার ধাতু।',
+    tags: ['chemistry','2010','periodic']
+  },
+  {
+    id: 'PHY-2010-079',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ধ্রুব বৈদ্যুতিক প্রতিরোধের SI একক কী?',
+    options: ['ওহম', 'ভোল্ট', 'অ্যাম্পিয়ার', 'ওয়াট'],
+    correct: [0],
+    explanation: 'প্রতিরোধের SI একক: ওহম।',
+    tags: ['physics','2010','electricity']
+  },
+  {
+    id: 'PHY-2010-080',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'তাপমাত্রা বৃদ্ধি পেলে পদার্থের অণুগুলোর গতি কেমন হয়?',
+    options: ['ধীর', 'দ্রুত', 'অপরিবর্তিত', 'শূন্য'],
+    correct: [1],
+    explanation: 'তাপমাত্রা বৃদ্ধি → অণুগুলোর গতিবেগ বৃদ্ধি।',
+    tags: ['physics','2010','thermodynamics']
+  },
+    {
+    id: 'BIO-2010-081',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'মাইটোকন্ড্রিয়ার প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'প্রোটিন সংশ্লেষ', 'ডিএনএ সংরক্ষণ', 'লিপিড উৎপাদন'],
+    correct: [0],
+    explanation: 'মাইটোকন্ড্রিয়া ATP উৎপাদন করে, যা শক্তি সরবরাহ করে।',
+    tags: ['biology','2010','cell-biology']
+  },
+  {
+    id: 'BIO-2010-082',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'কিডনির প্রধান কাজ কী?',
+    options: ['রক্ত পরিশোধন', 'রক্ত অক্সিজেনায়ন', 'পেশী সংকোচন', 'হরমোন নিঃসরণ'],
+    correct: [0],
+    explanation: 'কিডনি রক্ত থেকে বর্জ্য পদার্থ অপসারণ করে।',
+    tags: ['biology','2010','physiology']
+  },
+  {
+    id: 'BIO-2010-083',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'ইনসুলিন কোন গ্রন্থি থেকে নিঃসৃত হয়?',
+    options: ['প্যানক্রিয়াস', 'থাইরয়েড', 'অ্যাড্রিনাল', 'পিটুইটারি'],
+    correct: [0],
+    explanation: 'ইনসুলিন প্যানক্রিয়াসের বেটা কোষ থেকে নিঃসৃত হয়।',
+    tags: ['biology','2010','endocrine']
+  },
+  {
+    id: 'BIO-2010-084',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে কতটি জিন আছে আনুমানিক?',
+    options: ['২০,০০০–২৫,০০০', '১০,০০০–১৫,০০০', '৩০,০০০–৩৫,০০০', '৫০,০০০–৬০,০০০'],
+    correct: [0],
+    explanation: 'মানব জিনোমে আনুমানিক ২০,০০০–২৫,০০০ জিন রয়েছে।',
+    tags: ['biology','2010','genetics']
+  },
+  {
+    id: 'BIO-2010-085',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'রক্তের কোন উপাদান রক্ত জমাট বাঁধায় সাহায্য করে?',
+    options: ['শ্বেত রক্তকণিকা', 'প্লেটলেট', 'লোহিত রক্তকণিকা', 'প্লাজমা'],
+    correct: [1],
+    explanation: 'প্লেটলেট রক্ত জমাট বাঁধার কাজ করে।',
+    tags: ['biology','2010','hematology']
+  },
+  {
+    id: 'CHEM-2010-086',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaCl কোন ধরনের যৌগ?',
+    options: ['অম্ল', 'ক্ষার', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [2],
+    explanation: 'NaCl আয়নিক যৌগ।',
+    tags: ['chemistry','2010','inorganic']
+  },
+  {
+    id: 'CHEM-2010-087',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'মিথেনের রসায়নিক সূত্র কী?',
+    options: ['CH₄', 'C₂H₆', 'C₃H₈', 'C₄H₁₀'],
+    correct: [0],
+    explanation: 'মিথেনের সূত্র CH₄।',
+    tags: ['chemistry','2010','organic']
+  },
+  {
+    id: 'CHEM-2010-088',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'ডিএনএ এর মূল ভিত্তি কোন ধরনের নিউক্লিয়োটাইড?',
+    options: ['অ্যাডেনিন, থাইমিন, গুয়ানিন, সাইটোসিন', 'অ্যাডেনিন, ইউরাসিল, গুয়ানিন, সাইটোসিন', 'গ্লুকোজ, ফ্রুক্টোজ', 'অ্যাসিড, বেস, লিপিড'],
+    correct: [0],
+    explanation: 'ডিএনএ-তে A, T, G, C থাকে।',
+    tags: ['chemistry','2010','biochemistry']
+  },
+  {
+    id: 'PHY-2010-089',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ১০ কেজি হলে ত্বরণ ২ m/s², বল কত?',
+    options: ['২০ N', '৫ N', '১০ N', '৩০ N'],
+    correct: [0],
+    explanation: 'F = ma → 10×2 = 20 N।',
+    tags: ['physics','2010','mechanics']
+  },
+  {
+    id: 'PHY-2010-090',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'শব্দের বেগ বাতাসে প্রায় কত?',
+    options: ['৩৪০ m/s', '৩০০ m/s', '৩২০ m/s', '৩৬০ m/s'],
+    correct: [0],
+    explanation: 'শব্দের গতি বাতাসে প্রায় ৩৪০ m/s।',
+    tags: ['physics','2010','waves']
+  },
+  {
+    id: 'PHY-2010-091',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলোর রঙ বিভাজন কী নামে পরিচিত?',
+    options: ['ডিফ্র্যাকশন', 'প্রিজম্যাটিক স্পেকট্রাম', 'রিফ্লেকশন', 'ডোপলার'],
+    correct: [1],
+    explanation: 'প্রিজমে আলো বিভাজন = প্রিজম্যাটিক স্পেকট্রাম।',
+    tags: ['physics','2010','optics']
+  },
+  {
+    id: 'ENG-2010-092',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'He ____ gone to school yesterday.',
+    options: ['has', 'have', 'had', 'having'],
+    correct: [2],
+    explanation: 'Past perfect tense: had gone।',
+    tags: ['english','2010','tense']
+  },
+  {
+    id: 'ENG-2010-093',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Brave” এর সমার্থক শব্দ কোনটি?',
+    options: ['Coward', 'Courageous', 'Lazy', 'Weak'],
+    correct: [1],
+    explanation: 'Brave = Courageous।',
+    tags: ['english','2010','synonym']
+  },
+  {
+    id: 'ENG-2010-094',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Fast” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Quick', 'Rapid', 'Slow', 'Swift'],
+    correct: [2],
+    explanation: 'Fast ↔ Slow।',
+    tags: ['english','2010','antonym']
+  },
+  {
+    id: 'GK-2010-095',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের রাজধানী কোনটি?',
+    options: ['চট্টগ্রাম', 'খুলনা', 'ঢাকা', 'রাজশাহী'],
+    correct: [2],
+    explanation: 'ঢাকা বাংলাদেশের রাজধানী।',
+    tags: ['gk','2010','bangladesh']
+  },
+  {
+    id: 'GK-2010-096',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে বড় দেশ কোনটি?',
+    options: ['চীন', 'রাশিয়া', 'আমেরিকা', 'ভারত'],
+    correct: [1],
+    explanation: 'রাশিয়া সবচেয়ে বড় দেশ।',
+    tags: ['gk','2010','world']
+  },
+  {
+    id: 'BIO-2010-097',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের জন্য প্রধান গ্যাস কোনটি?',
+    options: ['O₂', 'CO₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'CO₂ ফটোসিন্থেসিসে প্রয়োজন।',
+    tags: ['biology','2010','plant-physiology']
+  },
+  {
+    id: 'CHEM-2010-098',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'হিলিয়াম কোন প্রকার গ্যাস?',
+    options: ['নোবেল', 'অ্যাক্টিভ', 'হাইড্রোজেন', 'অক্সিজেন'],
+    correct: [0],
+    explanation: 'হিলিয়াম নোবেল গ্যাস।',
+    tags: ['chemistry','2010','periodic']
+  },
+  {
+    id: 'PHY-2010-099',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ভোল্টের সংজ্ঞা কী?',
+    options: ['শক্তি/চার্জ', 'বেগ × সময়', 'মাস × ত্বরণ', 'শক্তি × সময়'],
+    correct: [0],
+    explanation: '1 ভোল্ট = 1 জুল/কুলম্ব।',
+    tags: ['physics','2010','electricity']
+  },
+  {
+    id: 'PHY-2010-100',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ১০০°C তে কী ঘটে?',
+    options: ['বাষ্পে রূপান্তর', 'ঠাণ্ডা হয়', 'জমাট বাঁধে', 'নিরপেক্ষ থাকে'],
+    correct: [0],
+    explanation: 'জল ১০০°C এ বাষ্পে রূপান্তর হয়।',
+    tags: ['physics','2010','thermodynamics']
+  },
+    {
+    id: 'BIO-2011-001',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'কোষের মেমব্রেনের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'সীমান্ত নির্ধারণ ও নিয়ন্ত্রণ', 'ডিএনএ সংরক্ষণ', 'প্রোটিন সংশ্লেষ'],
+    correct: [1],
+    explanation: 'কোষের মেমব্রেন কোষের ভিতরের পরিবেশ নিয়ন্ত্রণ করে।',
+    tags: ['biology','2011','cell-biology']
+  },
+  {
+    id: 'BIO-2011-002',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'থাইরয়েড হরমোনের প্রধান কাজ কী?',
+    options: ['রক্তচাপ নিয়ন্ত্রণ', 'মেটাবলিজম বৃদ্ধি', 'অক্সিজেন পরিবহন', 'রক্ত জমাট বাঁধা'],
+    correct: [1],
+    explanation: 'থাইরয়েড হরমোন মেটাবলিজম বৃদ্ধি করে।',
+    tags: ['biology','2011','endocrine']
+  },
+  {
+    id: 'BIO-2011-003',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'রক্ত',
+    question: 'প্লাজমার প্রধান কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'পুষ্টি ও হরমোন পরিবহন', 'রক্ত জমাট বাঁধা', 'রোগ প্রতিরোধ'],
+    correct: [1],
+    explanation: 'প্লাজমা পুষ্টি, হরমোন এবং বর্জ্য পদার্থ পরিবহন করে।',
+    tags: ['biology','2011','hematology']
+  },
+  {
+    id: 'BIO-2011-004',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে Y ক্রোমোজোম সাধারণত কারা পায়?',
+    options: ['পুরুষ', 'মহিলা', 'উভয়', 'কোনোটিই নয়'],
+    correct: [0],
+    explanation: 'Y ক্রোমোজোম সাধারণত পুরুষদের থাকে।',
+    tags: ['biology','2011','genetics']
+  },
+  {
+    id: 'BIO-2011-005',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'হৃদয়ের ডান পাম্প কোন দিকে রক্ত পাঠায়?',
+    options: ['ফুসফুস', 'দেহের সমস্ত অংশ', 'মস্তিষ্ক', 'কিডনি'],
+    correct: [0],
+    explanation: 'ডান পাম্প রক্ত ফুসফুসে পাঠায়।',
+    tags: ['biology','2011','physiology']
+  },
+  {
+    id: 'CHEM-2011-006',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'অক্সিজেন কোন গ্রুপের গ্যাস?',
+    options: ['গ্রুপ-১৬', 'গ্রুপ-১৮', 'গ্রুপ-১', 'গ্রুপ-১৭'],
+    correct: [0],
+    explanation: 'অক্সিজেন চতুর্দশ গ্রুপ (গ্রুপ-১৬) এর অ্যালোজেন।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'CHEM-2011-007',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'অ্যাসিটিক অ্যাসিডের সূত্র কী?',
+    options: ['CH₃COOH', 'HCl', 'NaOH', 'C₂H₅OH'],
+    correct: [0],
+    explanation: 'CH₃COOH = অ্যাসিটিক অ্যাসিড।',
+    tags: ['chemistry','2011','inorganic']
+  },
+  {
+    id: 'CHEM-2011-008',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথিলিনের সূত্র কী?',
+    options: ['C₂H₄', 'C₂H₆', 'CH₄', 'C₃H₆'],
+    correct: [0],
+    explanation: 'ইথিলিনের সূত্র = C₂H₄।',
+    tags: ['chemistry','2011','organic']
+  },
+  {
+    id: 'PHY-2011-009',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ৫ কেজি, ত্বরণ ৩ m/s² হলে বল কত?',
+    options: ['১৫ N', '৮ N', '৫ N', '২০ N'],
+    correct: [0],
+    explanation: 'F = ma → 5×3 = 15 N।',
+    tags: ['physics','2011','mechanics']
+  },
+  {
+    id: 'PHY-2011-010',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'শব্দের বেগ কোন মাধ্যমে দ্রুত?',
+    options: ['বায়ু', 'পানি', 'লোহা', 'শূন্যস্থান'],
+    correct: [2],
+    explanation: 'শব্দ তরঙ্গ কঠিন মাধ্যমে দ্রুত যায়।',
+    tags: ['physics','2011','waves']
+  },
+  {
+    id: 'PHY-2011-011',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলো বিভাজন কী নামে পরিচিত?',
+    options: ['ডিফ্র্যাকশন', 'প্রিজম্যাটিক স্পেকট্রাম', 'রিফ্লেকশন', 'ডোপলার'],
+    correct: [1],
+    explanation: 'আলো প্রিজমে বিভাজিত হয় = প্রিজম্যাটিক স্পেকট্রাম।',
+    tags: ['physics','2011','optics']
+  },
+  {
+    id: 'ENG-2011-012',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'She ____ reading a book now.',
+    options: ['is', 'are', 'was', 'were'],
+    correct: [0],
+    explanation: 'Present continuous tense: is reading।',
+    tags: ['english','2011','tense']
+  },
+  {
+    id: 'ENG-2011-013',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Smart” এর সমার্থক শব্দ কোনটি?',
+    options: ['Clever', 'Dull', 'Lazy', 'Weak'],
+    correct: [0],
+    explanation: 'Smart = Clever।',
+    tags: ['english','2011','synonym']
+  },
+  {
+    id: 'ENG-2011-014',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Hot” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Cold', 'Warm', 'Cool', 'Boiling'],
+    correct: [0],
+    explanation: 'Hot ↔ Cold।',
+    tags: ['english','2011','antonym']
+  },
+  {
+    id: 'GK-2011-015',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের মুক্তিযুদ্ধ কোন সালে হয়?',
+    options: ['১৯৭১', '১৯৬৫', '১৯৭৫', '১৯৮০'],
+    correct: [0],
+    explanation: 'মুক্তিযুদ্ধ ১৯৭১ সালে।',
+    tags: ['gk','2011','bangladesh']
+  },
+  {
+    id: 'GK-2011-016',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'জাতিসংঘ কোথায় প্রতিষ্ঠিত হয়?',
+    options: ['নিউ ইয়র্ক', 'জেনেভা', 'লন্ডন', 'প্যারিস'],
+    correct: [0],
+    explanation: 'জাতিসংঘ প্রতিষ্ঠিত হয় নিউ ইয়র্কে।',
+    tags: ['gk','2011','world']
+  },
+  {
+    id: 'BIO-2011-017',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসে প্রধান গ্যাস কোনটি লাগে?',
+    options: ['O₂', 'CO₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'ফটোসিন্থেসিসের জন্য CO₂ প্রয়োজন।',
+    tags: ['biology','2011','plant-physiology']
+  },
+  {
+    id: 'CHEM-2011-018',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাস কোনটি?',
+    options: ['অক্সিজেন', 'হিলিয়াম', 'নাইট্রোজেন', 'হাইড্রোজেন'],
+    correct: [1],
+    explanation: 'হিলিয়াম = নোবেল গ্যাস।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'PHY-2011-019',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'রেজিস্টরের SI একক কী?',
+    options: ['ওহম', 'ভোল্ট', 'অ্যাম্পিয়ার', 'ওয়াট'],
+    correct: [0],
+    explanation: 'প্রতিরোধের SI একক: ওহম।',
+    tags: ['physics','2011','electricity']
+  },
+  {
+    id: 'PHY-2011-020',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: '১০০°C তাপমাত্রায় জল কী ঘটে?',
+    options: ['বাষ্পে রূপান্তর', 'জমাট বাঁধা', 'ঠাণ্ডা হওয়া', 'নিরপেক্ষ থাকা'],
+    correct: [0],
+    explanation: 'জল ১০০°C এ বাষ্পে রূপান্তরিত হয়।',
+    tags: ['physics','2011','thermodynamics']
+  },
+    {
+    id: 'BIO-2011-021',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'লিসোসোমের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'পদার্থ ভাঙা ও অপসারণ', 'ডিএনএ সংরক্ষণ', 'প্রোটিন সংশ্লেষ'],
+    correct: [1],
+    explanation: 'লিসোসোম কোষের ভাঙা পদার্থ ও বর্জ্য অপসারণ করে।',
+    tags: ['biology','2011','cell-biology']
+  },
+  {
+    id: 'BIO-2011-022',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'নিয়ন্ত্রণ এবং সমন্বয়ের জন্য কোন স্নায়ুতন্ত্র গুরুত্বপূর্ণ?',
+    options: ['সেন্ট্রাল স্নায়ুতন্ত্র', 'পেরিফেরাল স্নায়ুতন্ত্র', 'এন্ডোক্রাইন সিস্টেম', 'রেসপিরেটরি সিস্টেম'],
+    correct: [0],
+    explanation: 'সেন্ট্রাল স্নায়ুতন্ত্র (মস্তিষ্ক ও মেরুদণ্ড) নিয়ন্ত্রণ করে।',
+    tags: ['biology','2011','physiology']
+  },
+  {
+    id: 'BIO-2011-023',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'অ্যাড্রিনালিন কোন প্রকার হরমোন?',
+    options: ['স্টেরয়েড', 'অ্যামিন', 'পেপটাইড', 'প্রোটিন'],
+    correct: [1],
+    explanation: 'অ্যাড্রিনালিন অ্যামিন হরমোন।',
+    tags: ['biology','2011','endocrine']
+  },
+  {
+    id: 'BIO-2011-024',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'ম্যান্ডেলের কোন নীতি বৈশিষ্ট্যগুলোর স্বতন্ত্র বণ্টন ব্যাখ্যা করে?',
+    options: ['Independent Assortment', 'Segregation', 'Dominance', 'Incomplete Dominance'],
+    correct: [0],
+    explanation: 'Independent Assortment নীতি বৈশিষ্ট্যগুলোর স্বতন্ত্র বণ্টন ব্যাখ্যা করে।',
+    tags: ['biology','2011','genetics']
+  },
+  {
+    id: 'BIO-2011-025',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'শ্বেত রক্তকণিকার প্রধান কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রোগ প্রতিরোধ', 'রক্ত জমাট বাঁধা', 'পুষ্টি শোষণ'],
+    correct: [1],
+    explanation: 'শ্বেত রক্তকণিকা রোগ প্রতিরোধ করে।',
+    tags: ['biology','2011','hematology']
+  },
+  {
+    id: 'CHEM-2011-026',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaOH কোন ধরনের যৌগ?',
+    options: ['ক্ষার', 'অম্ল', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [0],
+    explanation: 'NaOH = ক্ষার।',
+    tags: ['chemistry','2011','inorganic']
+  },
+  {
+    id: 'CHEM-2011-027',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'প্রোপেনের সূত্র কী?',
+    options: ['C₃H₆', 'C₃H₈', 'C₂H₄', 'C₄H₁₀'],
+    correct: [0],
+    explanation: 'প্রোপেন = C₃H₆।',
+    tags: ['chemistry','2011','organic']
+  },
+  {
+    id: 'CHEM-2011-028',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'প্রোটিনের মোনোমার কী?',
+    options: ['অ্যামিনো অ্যাসিড', 'নিউক্লিওটাইড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'প্রোটিনের মোনোমার হল অ্যামিনো অ্যাসিড।',
+    tags: ['chemistry','2011','biochemistry']
+  },
+  {
+    id: 'PHY-2011-029',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ২০ কেজি, ত্বরণ ১ m/s² হলে বল কত?',
+    options: ['২০ N', '১০ N', '৪০ N', '৩০ N'],
+    correct: [0],
+    explanation: 'F = ma → 20×1 = 20 N।',
+    tags: ['physics','2011','mechanics']
+  },
+  {
+    id: 'PHY-2011-030',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'কোন মাধ্যমে শব্দ দ্রুত যায়?',
+    options: ['বায়ু', 'পানি', 'লোহা', 'শূন্যস্থান'],
+    correct: [2],
+    explanation: 'শব্দ তরঙ্গ কঠিন মাধ্যমে দ্রুত যায়।',
+    tags: ['physics','2011','waves']
+  },
+  {
+    id: 'PHY-2011-031',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'আলোতে রঙ বিভাজনের ঘটনা কী নামে?',
+    options: ['ডিফ্র্যাকশন', 'প্রিজম্যাটিক স্পেকট্রাম', 'রিফ্লেকশন', 'ডোপলার'],
+    correct: [1],
+    explanation: 'প্রিজমে আলোর বিভাজন প্রিজম্যাটিক স্পেকট্রাম।',
+    tags: ['physics','2011','optics']
+  },
+  {
+    id: 'ENG-2011-032',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'They ____ going to the market.',
+    options: ['is', 'are', 'was', 'were'],
+    correct: [1],
+    explanation: 'Present continuous tense: are going।',
+    tags: ['english','2011','tense']
+  },
+  {
+    id: 'ENG-2011-033',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Happy” এর সমার্থক শব্দ কোনটি?',
+    options: ['Sad', 'Joyful', 'Angry', 'Tired'],
+    correct: [1],
+    explanation: 'Happy = Joyful।',
+    tags: ['english','2011','synonym']
+  },
+  {
+    id: 'ENG-2011-034',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Light” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Dark', 'Heavy', 'Bright', 'Shiny'],
+    correct: [0],
+    explanation: 'Light ↔ Dark।',
+    tags: ['english','2011','antonym']
+  },
+  {
+    id: 'GK-2011-035',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের প্রধান নদী কোনটি?',
+    options: ['যমুনা', 'পদ্মা', 'মেঘনা', 'তিস্তা'],
+    correct: [1],
+    explanation: 'পদ্মা প্রধান নদী।',
+    tags: ['gk','2011','bangladesh']
+  },
+  {
+    id: 'GK-2011-036',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে বড় মহাসাগর কোনটি?',
+    options: ['প্যাসিফিক', 'অ্যাটলান্টিক', 'ইন্ডিয়ান', 'আর্টিক'],
+    correct: [0],
+    explanation: 'প্যাসিফিক মহাসাগর সবচেয়ে বড়।',
+    tags: ['gk','2011','world']
+  },
+  {
+    id: 'BIO-2011-037',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের প্রধান স্থান কোনটি?',
+    options: ['রুট', 'পাতা', 'ডাল', 'ফুল'],
+    correct: [1],
+    explanation: 'পাতায় ক্লোরোপ্লাস্টে ফটোসিন্থেসিস ঘটে।',
+    tags: ['biology','2011','plant-physiology']
+  },
+  {
+    id: 'CHEM-2011-038',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাসের উদাহরণ কোনটি?',
+    options: ['হিলিয়াম', 'অক্সিজেন', 'নাইট্রোজেন', 'হাইড্রোজেন'],
+    correct: [0],
+    explanation: 'হিলিয়াম = নোবেল গ্যাস।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'PHY-2011-039',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: '1 ভোল্টের সংজ্ঞা কী?',
+    options: ['1 জুল/কুলম্ব', '1 অ্যাম্পিয়ার/ওহম', '1 কুলম্ব/জুল', '1 ওয়াট/সেকেন্ড'],
+    correct: [0],
+    explanation: '1 ভোল্ট = 1 জুল/কুলম্ব।',
+    tags: ['physics','2011','electricity']
+  },
+  {
+    id: 'PHY-2011-040',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ০°C তে কী হয়?',
+    options: ['বাষ্পে রূপান্তর', 'জমাট বাঁধে', 'গরম হয়', 'অপরিবর্তিত থাকে'],
+    correct: [1],
+    explanation: 'জল ০°C এ জমাট বাঁধে।',
+    tags: ['physics','2011','thermodynamics']
+  },
+    {
+    id: 'BIO-2011-041',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'রাইবোসোমের প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'প্রোটিন সংশ্লেষ', 'ডিএনএ সংরক্ষণ', 'লিপিড উৎপাদন'],
+    correct: [1],
+    explanation: 'রাইবোসোম প্রোটিন সংশ্লেষ করে।',
+    tags: ['biology','2011','cell-biology']
+  },
+  {
+    id: 'BIO-2011-042',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'ফুসফুসে কোন গ্যাস শোষিত হয়?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'ফুসফুসে অক্সিজেন শোষিত হয়।',
+    tags: ['biology','2011','physiology']
+  },
+  {
+    id: 'BIO-2011-043',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'কোর্টিসল কোন গ্রন্থি থেকে নিঃসৃত হয়?',
+    options: ['অ্যাড্রিনাল', 'প্যানক্রিয়াস', 'থাইরয়েড', 'পিটুইটারি'],
+    correct: [0],
+    explanation: 'কোর্টিসল অ্যাড্রিনাল কর্টেক্স থেকে নিঃসৃত হয়।',
+    tags: ['biology','2011','endocrine']
+  },
+  {
+    id: 'BIO-2011-044',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে কতটি ক্রোমোজোম থাকে?',
+    options: ['৪৬', '৪৪', '৪৮', '৪২'],
+    correct: [0],
+    explanation: 'মানবদেহে ৪৬ ক্রোমোজোম থাকে।',
+    tags: ['biology','2011','genetics']
+  },
+  {
+    id: 'BIO-2011-045',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'রক্তের লোহিতকণিকার প্রধান কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রোগ প্রতিরোধ', 'রক্ত জমাট বাঁধা', 'পুষ্টি শোষণ'],
+    correct: [0],
+    explanation: 'লোহিতকণিকা রক্তে অক্সিজেন পরিবহন করে।',
+    tags: ['biology','2011','hematology']
+  },
+  {
+    id: 'CHEM-2011-046',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'HCl কোন ধরনের যৌগ?',
+    options: ['অম্ল', 'ক্ষার', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [0],
+    explanation: 'HCl = অম্ল।',
+    tags: ['chemistry','2011','inorganic']
+  },
+  {
+    id: 'CHEM-2011-047',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথানলের সূত্র কী?',
+    options: ['C₂H₅OH', 'CH₄', 'C₂H₄', 'C₃H₆'],
+    correct: [0],
+    explanation: 'ইথানল = C₂H₅OH।',
+    tags: ['chemistry','2011','organic']
+  },
+  {
+    id: 'CHEM-2011-048',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'ডিএনএ-এর মোনোমার কোনটি?',
+    options: ['নিউক্লিওটাইড', 'অ্যামিনো অ্যাসিড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'ডিএনএ-এর মোনোমার নিউক্লিওটাইড।',
+    tags: ['chemistry','2011','biochemistry']
+  },
+  {
+    id: 'PHY-2011-049',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ২ কেজি, ত্বরণ ৫ m/s² হলে বল কত?',
+    options: ['১০ N', '৫ N', '১৫ N', '২০ N'],
+    correct: [0],
+    explanation: 'F = ma → 2×5 = 10 N।',
+    tags: ['physics','2011','mechanics']
+  },
+  {
+    id: 'PHY-2011-050',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'শব্দের বেগ বাতাসে প্রায় কত?',
+    options: ['৩৪০ m/s', '৩০০ m/s', '৩২০ m/s', '৩৬০ m/s'],
+    correct: [0],
+    explanation: 'বাতাসে শব্দের বেগ প্রায় ৩৪০ m/s।',
+    tags: ['physics','2011','waves']
+  },
+  {
+    id: 'PHY-2011-051',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'আলো প্রতিফলনের নিয়ম কী নামে পরিচিত?',
+    options: ['আইনের প্রতিফলন', 'আইনের প্রতিসরণ', 'ডোপলার প্রভাব', 'ডিফ্র্যাকশন'],
+    correct: [0],
+    explanation: 'আলো প্রতিফলনের নিয়ম = আইনের প্রতিফলন।',
+    tags: ['physics','2011','optics']
+  },
+  {
+    id: 'ENG-2011-052',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'He ____ eaten breakfast already.',
+    options: ['has', 'have', 'had', 'having'],
+    correct: [0],
+    explanation: 'Present perfect tense: has eaten।',
+    tags: ['english','2011','tense']
+  },
+  {
+    id: 'ENG-2011-053',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Angry” এর সমার্থক শব্দ কোনটি?',
+    options: ['Furious', 'Calm', 'Happy', 'Sad'],
+    correct: [0],
+    explanation: 'Angry = Furious।',
+    tags: ['english','2011','synonym']
+  },
+  {
+    id: 'ENG-2011-054',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Rich” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Poor', 'Wealthy', 'Powerful', 'Strong'],
+    correct: [0],
+    explanation: 'Rich ↔ Poor।',
+    tags: ['english','2011','antonym']
+  },
+  {
+    id: 'GK-2011-055',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের স্বাধীনতার ঘোষক কে ছিলেন?',
+    options: ['শেখ মুজিবুর রহমান', 'রফিকুল ইসলাম', 'বঙ্গবন্ধু', 'মোস্তফা কামাল'],
+    correct: [0],
+    explanation: 'শেখ মুজিবুর রহমান স্বাধীনতার ঘোষক।',
+    tags: ['gk','2011','bangladesh']
+  },
+  {
+    id: 'GK-2011-056',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'জাতিসংঘ কত সালে প্রতিষ্ঠিত হয়?',
+    options: ['১৯৪৫', '১৯৩৯', '১৯৫০', '১৯৬০'],
+    correct: [0],
+    explanation: 'জাতিসংঘ প্রতিষ্ঠিত হয় ১৯৪৫ সালে।',
+    tags: ['gk','2011','world']
+  },
+  {
+    id: 'BIO-2011-057',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের জন্য প্রধান লাইট উৎস কোনটি?',
+    options: ['সূর্য', 'মহাসাগর', 'মাটির তাপ', 'বাতাস'],
+    correct: [0],
+    explanation: 'সূর্য ফটোসিন্থেসিসের প্রধান লাইট উৎস।',
+    tags: ['biology','2011','plant-physiology']
+  },
+  {
+    id: 'CHEM-2011-058',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাসের বৈশিষ্ট্য কী?',
+    options: ['অকার্যকর', 'চলনশীল', 'ক্রিয়াশীল', 'অ্যালকলাইন'],
+    correct: [0],
+    explanation: 'নোবেল গ্যাস অকার্যকর।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'PHY-2011-059',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'কারেন্ট = ভোল্টেজ ÷ প্রতিরোধ। এটিকে কী নামে জানি?',
+    options: ['ওহমের নিয়ম', 'কুলম্বের নিয়ম', 'ফারাডের নিয়ম', 'নিউটনের সূত্র'],
+    correct: [0],
+    explanation: 'ওহমের নিয়ম: I = V/R।',
+    tags: ['physics','2011','electricity']
+  },
+  {
+    id: 'PHY-2011-060',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ১০০°C এ কী ঘটে?',
+    options: ['বাষ্পে রূপান্তর', 'জমাট বাঁধা', 'ঠাণ্ডা হওয়া', 'অপরিবর্তিত থাকা'],
+    correct: [0],
+    explanation: 'জল ১০০°C এ বাষ্পে রূপান্তরিত হয়।',
+    tags: ['physics','2011','thermodynamics']
+  },
+    {
+    id: 'BIO-2011-061',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'মাইটোকন্ড্রিয়ার প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'প্রোটিন সংশ্লেষ', 'ডিএনএ সংরক্ষণ', 'লিপিড সংরক্ষণ'],
+    correct: [0],
+    explanation: 'মাইটোকন্ড্রিয়া শক্তি উৎপাদন করে।',
+    tags: ['biology','2011','cell-biology']
+  },
+  {
+    id: 'BIO-2011-062',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'রক্তচাপ নিয়ন্ত্রণে কোন অঙ্গ গুরুত্বপূর্ণ?',
+    options: ['হৃদয়', 'কিডনি', 'ফুসফুস', 'লিভার'],
+    correct: [1],
+    explanation: 'কিডনি রেনিন-অ্যাঙ্গিয়োটেনসিন সিস্টেমের মাধ্যমে রক্তচাপ নিয়ন্ত্রণ করে।',
+    tags: ['biology','2011','physiology']
+  },
+  {
+    id: 'BIO-2011-063',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'ইনসুলিন কোন গ্রন্থি থেকে নিঃসৃত হয়?',
+    options: ['প্যানক্রিয়াস', 'থাইরয়েড', 'অ্যাড্রিনাল', 'পিটুইটারি'],
+    correct: [0],
+    explanation: 'ইনসুলিন প্যানক্রিয়াসের বেটা কোষ থেকে নিঃসৃত হয়।',
+    tags: ['biology','2011','endocrine']
+  },
+  {
+    id: 'BIO-2011-064',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে X ক্রোমোজোমের সংখ্যা সাধারণত কত?',
+    options: ['২', '১', '৩', '৪'],
+    correct: [0],
+    explanation: 'মানবদেহে সাধারণত ২টি X ক্রোমোজোম থাকে (মহিলাদের জন্য)।',
+    tags: ['biology','2011','genetics']
+  },
+  {
+    id: 'BIO-2011-065',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'প্লেটলেটের প্রধান কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রক্ত জমাট বাঁধা', 'রোগ প্রতিরোধ', 'পুষ্টি শোষণ'],
+    correct: [1],
+    explanation: 'প্লেটলেট রক্ত জমাট বাঁধায় সাহায্য করে।',
+    tags: ['biology','2011','hematology']
+  },
+  {
+    id: 'CHEM-2011-066',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaCl কোন ধরনের যৌগ?',
+    options: ['আয়নিক', 'কোভালেন্ট', 'অম্ল', 'ক্ষার'],
+    correct: [0],
+    explanation: 'NaCl = আয়নিক যৌগ।',
+    tags: ['chemistry','2011','inorganic']
+  },
+  {
+    id: 'CHEM-2011-067',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'মিথেনের সূত্র কী?',
+    options: ['CH₄', 'C₂H₆', 'C₂H₄', 'C₃H₈'],
+    correct: [0],
+    explanation: 'মিথেন = CH₄।',
+    tags: ['chemistry','2011','organic']
+  },
+  {
+    id: 'CHEM-2011-068',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'এনজাইম কোন ধরনের যৌগ?',
+    options: ['প্রোটিন', 'নিউক্লিওটাইড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'এনজাইম সাধারণত প্রোটিন।',
+    tags: ['chemistry','2011','biochemistry']
+  },
+  {
+    id: 'PHY-2011-069',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'একটি বস্তু স্থির থাকে। এর ত্বরণ কত?',
+    options: ['০', '১ m/s²', '৯.৮ m/s²', '১০ m/s²'],
+    correct: [0],
+    explanation: 'স্থির বস্তু ত্বরণ ০।',
+    tags: ['physics','2011','mechanics']
+  },
+  {
+    id: 'PHY-2011-070',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'দৈর্ঘ্য ১ মি তরঙ্গদৈর্ঘ্যের বেগ ৩৪০ m/s হলে ফ্রিকোয়েন্সি কত?',
+    options: ['৩৪০ Hz', '৩৪ Hz', '৩৪০০ Hz', '৩.৪ Hz'],
+    correct: [0],
+    explanation: 'f = v/λ → 340/1 = 340 Hz।',
+    tags: ['physics','2011','waves']
+  },
+  {
+    id: 'PHY-2011-071',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'আলো প্রতিসরণের নিয়ম কী বলে?',
+    options: ['আইনের প্রতিসরণ', 'আইনের প্রতিফলন', 'ডিফ্র্যাকশন', 'ডোপলার প্রভাব'],
+    correct: [0],
+    explanation: 'আলো প্রতিসরণের নিয়ম = আইনের প্রতিসরণ।',
+    tags: ['physics','2011','optics']
+  },
+  {
+    id: 'ENG-2011-072',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'I ____ gone to school yesterday.',
+    options: ['have', 'had', 'has', 'am'],
+    correct: [1],
+    explanation: 'Past perfect tense: had gone।',
+    tags: ['english','2011','tense']
+  },
+  {
+    id: 'ENG-2011-073',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Quick” এর সমার্থক শব্দ কোনটি?',
+    options: ['Fast', 'Slow', 'Lazy', 'Weak'],
+    correct: [0],
+    explanation: 'Quick = Fast।',
+    tags: ['english','2011','synonym']
+  },
+  {
+    id: 'ENG-2011-074',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Brave” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Coward', 'Hero', 'Strong', 'Fearless'],
+    correct: [0],
+    explanation: 'Brave ↔ Coward।',
+    tags: ['english','2011','antonym']
+  },
+  {
+    id: 'GK-2011-075',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের রাজধানী কোনটি?',
+    options: ['ঢাকা', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা'],
+    correct: [0],
+    explanation: 'বাংলাদেশের রাজধানী ঢাকা।',
+    tags: ['gk','2011','bangladesh']
+  },
+  {
+    id: 'GK-2011-076',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে বড় দেশ কোনটি?',
+    options: ['রাশিয়া', 'চীন', 'আমেরিকা', 'কানাডা'],
+    correct: [0],
+    explanation: 'রাশিয়া সবচেয়ে বড় দেশ।',
+    tags: ['gk','2011','world']
+  },
+  {
+    id: 'BIO-2011-077',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের জন্য প্রধান গ্যাস কোনটি লাগে?',
+    options: ['O₂', 'CO₂', 'N₂', 'H₂'],
+    correct: [1],
+    explanation: 'ফটোসিন্থেসিসের জন্য CO₂ প্রয়োজন।',
+    tags: ['biology','2011','plant-physiology']
+  },
+  {
+    id: 'CHEM-2011-078',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাস সাধারণত কত প্রতিক্রিয়াশীল?',
+    options: ['অকার্যকর', 'ক্রিয়াশীল', 'অ্যাসিডিক', 'ক্ষারীয়'],
+    correct: [0],
+    explanation: 'নোবেল গ্যাস অকার্যকর।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'PHY-2011-079',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ওহমের নিয়ম কোনটি নির্দেশ করে?',
+    options: ['I = V/R', 'V = IR²', 'P = IV', 'R = V+I'],
+    correct: [0],
+    explanation: 'ওহমের নিয়ম: I = V/R।',
+    tags: ['physics','2011','electricity']
+  },
+  {
+    id: 'PHY-2011-080',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'বাষ্পায়ন কোন প্রক্রিয়া দ্বারা ঘটে?',
+    options: ['তাপ প্রয়োগে', 'ঠাণ্ডায়', 'দাবিতে', 'শূন্যে'],
+    correct: [0],
+    explanation: 'বাষ্পায়ন তাপ প্রয়োগে ঘটে।',
+    tags: ['physics','2011','thermodynamics']
+  },
+    {
+    id: 'BIO-2011-081',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'গোলজি অ্যাপারেটের প্রধান কাজ কী?',
+    options: ['প্রোটিন প্যাকেজিং ও প্রেরণ', 'শক্তি উৎপাদন', 'ডিএনএ সংরক্ষণ', 'লিপিড সংরক্ষণ'],
+    correct: [0],
+    explanation: 'গোলজি অ্যাপারেট প্রোটিন প্যাকেজিং ও প্রেরণ করে।',
+    tags: ['biology','2011','cell-biology']
+  },
+  {
+    id: 'BIO-2011-082',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'হৃদয়ের ডান এবং বাম প্রাথমিক অংশকে কী বলে?',
+    options: ['এট্রিয়া', 'ভেন্ট্রিকল', 'নেজল', 'ফোলিকল'],
+    correct: [0],
+    explanation: 'হৃদয়ে প্রাথমিক অংশ = এট্রিয়া।',
+    tags: ['biology','2011','physiology']
+  },
+  {
+    id: 'BIO-2011-083',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'থাইরয়েড হরমোনের প্রধান কার্য কী?',
+    options: ['মেটাবলিজম নিয়ন্ত্রণ', 'রক্তচাপ নিয়ন্ত্রণ', 'অক্সিজেন পরিবহন', 'রক্ত জমাট বাঁধা'],
+    correct: [0],
+    explanation: 'থাইরয়েড হরমোন মেটাবলিজম নিয়ন্ত্রণ করে।',
+    tags: ['biology','2011','endocrine']
+  },
+  {
+    id: 'BIO-2011-084',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহের লিঙ্গ ক্রোমোজোম কী?',
+    options: ['X এবং Y', 'A এবং B', 'C এবং D', 'M এবং N'],
+    correct: [0],
+    explanation: 'মানবদেহের লিঙ্গ ক্রোমোজোম = X এবং Y।',
+    tags: ['biology','2011','genetics']
+  },
+  {
+    id: 'BIO-2011-085',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'শ্বেতকণিকার প্রধান কার্য কী?',
+    options: ['রক্ত জমাট বাঁধা', 'রোগ প্রতিরোধ', 'অক্সিজেন পরিবহন', 'পুষ্টি শোষণ'],
+    correct: [1],
+    explanation: 'শ্বেতকণিকা রোগ প্রতিরোধ করে।',
+    tags: ['biology','2011','hematology']
+  },
+  {
+    id: 'CHEM-2011-086',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'KOH কোন ধরনের যৌগ?',
+    options: ['ক্ষার', 'অম্ল', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [0],
+    explanation: 'KOH = ক্ষার।',
+    tags: ['chemistry','2011','inorganic']
+  },
+  {
+    id: 'CHEM-2011-087',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথিলিনের সূত্র কী?',
+    options: ['C₂H₄', 'C₂H₆', 'CH₄', 'C₃H₆'],
+    correct: [0],
+    explanation: 'ইথিলিন = C₂H₄।',
+    tags: ['chemistry','2011','organic']
+  },
+  {
+    id: 'CHEM-2011-088',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'নিউক্লিক অ্যাসিডের মোনোমার কী?',
+    options: ['নিউক্লিওটাইড', 'অ্যামিনো অ্যাসিড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'নিউক্লিক অ্যাসিডের মোনোমার = নিউক্লিওটাইড।',
+    tags: ['chemistry','2011','biochemistry']
+  },
+  {
+    id: 'PHY-2011-089',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'গতি = কত?',
+    options: ['স্থান পরিবর্তন ÷ সময়', 'বেগ ÷ সময়', 'বল ÷ ভর', 'শক্তি ÷ সময়'],
+    correct: [0],
+    explanation: 'গতি = স্থান পরিবর্তন ÷ সময়।',
+    tags: ['physics','2011','mechanics']
+  },
+  {
+    id: 'PHY-2011-090',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'দূরত্ব ১৭০ মি, বেগ ৩৪০ m/s হলে ফ্রিকোয়েন্সি কত?',
+    options: ['২ Hz', '১ Hz', '১০ Hz', '৫ Hz'],
+    correct: [0],
+    explanation: 'f = v/λ → 340/170 = 2 Hz।',
+    tags: ['physics','2011','waves']
+  },
+  {
+    id: 'PHY-2011-091',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলোর বিভাজন কী নামে?',
+    options: ['স্পেকট্রাম', 'ডিফ্র্যাকশন', 'প্রতিফলন', 'প্রতিসরণ'],
+    correct: [0],
+    explanation: 'প্রিজমে আলোর বিভাজন = স্পেকট্রাম।',
+    tags: ['physics','2011','optics']
+  },
+  {
+    id: 'ENG-2011-092',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'She ____ playing tennis now.',
+    options: ['is', 'are', 'was', 'were'],
+    correct: [0],
+    explanation: 'Present continuous tense: is playing।',
+    tags: ['english','2011','tense']
+  },
+  {
+    id: 'ENG-2011-093',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Difficult” এর সমার্থক শব্দ কোনটি?',
+    options: ['Hard', 'Easy', 'Simple', 'Light'],
+    correct: [0],
+    explanation: 'Difficult = Hard।',
+    tags: ['english','2011','synonym']
+  },
+  {
+    id: 'ENG-2011-094',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Night” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Day', 'Evening', 'Morning', 'Dark'],
+    correct: [0],
+    explanation: 'Night ↔ Day।',
+    tags: ['english','2011','antonym']
+  },
+  {
+    id: 'GK-2011-095',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের প্রধান বন্দর কোনটি?',
+    options: ['চট্টগ্রাম', 'কক্সবাজার', 'ঢাকা', 'রাজশাহী'],
+    correct: [0],
+    explanation: 'চট্টগ্রাম বাংলাদেশের প্রধান বন্দর।',
+    tags: ['gk','2011','bangladesh']
+  },
+  {
+    id: 'GK-2011-096',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে গভীর মহাসাগর কোনটি?',
+    options: ['প্যাসিফিক', 'অ্যাটলান্টিক', 'ইন্ডিয়ান', 'আর্টিক'],
+    correct: [0],
+    explanation: 'প্যাসিফিক মহাসাগর সবচেয়ে গভীর।',
+    tags: ['gk','2011','world']
+  },
+  {
+    id: 'BIO-2011-097',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসে কোন উপাদান ব্যবহার হয়?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [0],
+    explanation: 'ফটোসিন্থেসিসে CO₂ ব্যবহার হয়।',
+    tags: ['biology','2011','plant-physiology']
+  },
+  {
+    id: 'CHEM-2011-098',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'হিলিয়াম নোবেল গ্যাস কি?',
+    options: ['হ্যাঁ', 'না', 'শুধু অক্সিজেন', 'শুধু হাইড্রোজেন'],
+    correct: [0],
+    explanation: 'হিলিয়াম নোবেল গ্যাস।',
+    tags: ['chemistry','2011','periodic']
+  },
+  {
+    id: 'PHY-2011-099',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ভোল্টেজ = কাজ ÷ চার্জ। এটিকে কী নামে জানি?',
+    options: ['ভোল্ট', 'ওহম', 'কুলম্ব', 'ওয়াট'],
+    correct: [0],
+    explanation: 'V = W/Q।',
+    tags: ['physics','2011','electricity']
+  },
+  {
+    id: 'PHY-2011-100',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ০°C তে কোন অবস্থায় থাকে?',
+    options: ['বাষ্প', 'ঠান্ডা তরল/বরফ', 'গরম', 'অপরিবর্তিত'],
+    correct: [1],
+    explanation: 'জল ০°C তে বরফ বা বরফের মতো অবস্থায় থাকে।',
+    tags: ['physics','2011','thermodynamics']
+  },
+    {
+    id: 'BIO-2012-001',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'কোষের মূল শক্তি উৎপাদনকারী অঙ্গ কোনটি?',
+    options: ['মাইটোকন্ড্রিয়া', 'রাইবোসোম', 'গোলজি অ্যাপারেট', 'লিসোসোম'],
+    correct: [0],
+    explanation: 'মাইটোকন্ড্রিয়া শক্তি উৎপাদন করে।',
+    tags: ['biology','2012','cell-biology']
+  },
+  {
+    id: 'BIO-2012-002',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'ফুসফুসে কোন গ্যাস শোষিত হয়?',
+    options: ['O₂', 'CO₂', 'N₂', 'H₂'],
+    correct: [0],
+    explanation: 'ফুসফুসে অক্সিজেন শোষিত হয়।',
+    tags: ['biology','2012','physiology']
+  },
+  {
+    id: 'BIO-2012-003',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'পিটুইটারি গ্রন্থি কোন হরমোন নিঃসরণ করে?',
+    options: ['টেস্টোস্টেরন', 'এড্রিনালিন', 'Growth Hormone', 'থাইরক্সিন'],
+    correct: [2],
+    explanation: 'Growth Hormone পিটুইটারি গ্রন্থি থেকে নিঃসৃত হয়।',
+    tags: ['biology','2012','endocrine']
+  },
+  {
+    id: 'BIO-2012-004',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে মোট ক্রোমোজোম সংখ্যা কত?',
+    options: ['৪৬', '৪৪', '৪৮', '৪২'],
+    correct: [0],
+    explanation: 'মানবদেহে ৪৬ ক্রোমোজোম থাকে।',
+    tags: ['biology','2012','genetics']
+  },
+  {
+    id: 'BIO-2012-005',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'রক্তের লোহিতকণিকার প্রধান কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রোগ প্রতিরোধ', 'রক্ত জমাট বাঁধা', 'পুষ্টি শোষণ'],
+    correct: [0],
+    explanation: 'লোহিতকণিকা রক্তে অক্সিজেন পরিবহন করে।',
+    tags: ['biology','2012','hematology']
+  },
+  {
+    id: 'CHEM-2012-006',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaOH কোন ধরনের যৌগ?',
+    options: ['ক্ষার', 'অম্ল', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [0],
+    explanation: 'NaOH = ক্ষার।',
+    tags: ['chemistry','2012','inorganic']
+  },
+  {
+    id: 'CHEM-2012-007',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথানল সূত্র কী?',
+    options: ['C₂H₅OH', 'CH₄', 'C₂H₄', 'C₃H₈'],
+    correct: [0],
+    explanation: 'ইথানল = C₂H₅OH।',
+    tags: ['chemistry','2012','organic']
+  },
+  {
+    id: 'CHEM-2012-008',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'ডিএনএ-এর মোনোমার কী?',
+    options: ['নিউক্লিওটাইড', 'অ্যামিনো অ্যাসিড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'ডিএনএ-এর মোনোমার নিউক্লিওটাইড।',
+    tags: ['chemistry','2012','biochemistry']
+  },
+  {
+    id: 'PHY-2012-009',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ২ কেজি, ত্বরণ ৫ m/s² হলে বল কত?',
+    options: ['১০ N', '৫ N', '১৫ N', '২০ N'],
+    correct: [0],
+    explanation: 'F = ma → 2×5 = 10 N।',
+    tags: ['physics','2012','mechanics']
+  },
+  {
+    id: 'PHY-2012-010',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'শব্দের বেগ বাতাসে প্রায় কত?',
+    options: ['৩৪০ m/s', '৩২০ m/s', '৩৫০ m/s', '৩৬০ m/s'],
+    correct: [0],
+    explanation: 'বাতাসে শব্দের বেগ প্রায় ৩৪০ m/s।',
+    tags: ['physics','2012','waves']
+  },
+  {
+    id: 'PHY-2012-011',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রতিফলনের নিয়ম কোনটি বলে?',
+    options: ['প্রতিফলনের আইন', 'প্রতিসরণের আইন', 'ডিফ্র্যাকশন', 'ডোপলার প্রভাব'],
+    correct: [0],
+    explanation: 'প্রতিফলনের নিয়ম = আইনের প্রতিফলন।',
+    tags: ['physics','2012','optics']
+  },
+  {
+    id: 'ENG-2012-012',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'He ____ eaten breakfast.',
+    options: ['has', 'have', 'had', 'having'],
+    correct: [0],
+    explanation: 'Present perfect tense: has eaten।',
+    tags: ['english','2012','tense']
+  },
+  {
+    id: 'ENG-2012-013',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Happy” এর সমার্থক শব্দ কোনটি?',
+    options: ['Joyful', 'Sad', 'Angry', 'Tired'],
+    correct: [0],
+    explanation: 'Happy = Joyful।',
+    tags: ['english','2012','synonym']
+  },
+  {
+    id: 'ENG-2012-014',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Big” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Small', 'Tall', 'Long', 'Short'],
+    correct: [0],
+    explanation: 'Big ↔ Small।',
+    tags: ['english','2012','antonym']
+  },
+  {
+    id: 'GK-2012-015',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের স্বাধীনতার বছর কত?',
+    options: ['১৯৭১', '১৯৭০', '১৯৭২', '১৯৭৩'],
+    correct: [0],
+    explanation: 'বাংলাদেশ স্বাধীন হয় ১৯৭১ সালে।',
+    tags: ['gk','2012','bangladesh']
+  },
+  {
+    id: 'GK-2012-016',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'জাতিসংঘ কত সালে প্রতিষ্ঠিত হয়?',
+    options: ['১৯৪৫', '১৯৩৯', '১৯৫০', '১৯৬০'],
+    correct: [0],
+    explanation: 'জাতিসংঘ প্রতিষ্ঠিত হয় ১৯৪৫ সালে।',
+    tags: ['gk','2012','world']
+  },
+  {
+    id: 'BIO-2012-017',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের জন্য প্রধান গ্যাস কোনটি লাগে?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [0],
+    explanation: 'ফটোসিন্থেসিসের জন্য CO₂ প্রয়োজন।',
+    tags: ['biology','2012','plant-physiology']
+  },
+  {
+    id: 'CHEM-2012-018',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাসের বৈশিষ্ট্য কী?',
+    options: ['অকার্যকর', 'ক্রিয়াশীল', 'অ্যাসিডিক', 'ক্ষারীয়'],
+    correct: [0],
+    explanation: 'নোবেল গ্যাস অকার্যকর।',
+    tags: ['chemistry','2012','periodic']
+  },
+  {
+    id: 'PHY-2012-019',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'কারেন্ট = ভোল্টেজ ÷ প্রতিরোধ। এটিকে কী নামে জানি?',
+    options: ['ওহমের নিয়ম', 'কুলম্বের নিয়ম', 'ফারাডের নিয়ম', 'নিউটনের সূত্র'],
+    correct: [0],
+    explanation: 'ওহমের নিয়ম: I = V/R।',
+    tags: ['physics','2012','electricity']
+  },
+  {
+    id: 'PHY-2012-020',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ১০০°C এ কী ঘটে?',
+    options: ['বাষ্পে রূপান্তর', 'জমাট বাঁধা', 'ঠাণ্ডা হওয়া', 'অপরিবর্তিত থাকা'],
+    correct: [0],
+    explanation: 'জল ১০০°C এ বাষ্পে রূপান্তরিত হয়।',
+    tags: ['physics','2012','thermodynamics']
+  },
+    {
+    id: 'BIO-2012-021',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'রাইবোসোমের প্রধান কাজ কী?',
+    options: ['প্রোটিন সংশ্লেষ', 'শক্তি উৎপাদন', 'ডিএনএ সংরক্ষণ', 'লিপিড সংরক্ষণ'],
+    correct: [0],
+    explanation: 'রাইবোসোম প্রোটিন সংশ্লেষ করে।',
+    tags: ['biology','2012','cell-biology']
+  },
+  {
+    id: 'BIO-2012-022',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'কিডনির প্রধান কাজ কী?',
+    options: ['মূত্র তৈরি', 'রক্তচাপ নিয়ন্ত্রণ', 'অক্সিজেন পরিবহন', 'হরমোন নিঃসরণ'],
+    correct: [0],
+    explanation: 'কিডনি মূত্র তৈরি ও দেহের তরল ভারসাম্য বজায় রাখে।',
+    tags: ['biology','2012','physiology']
+  },
+  {
+    id: 'BIO-2012-023',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'অ্যাড্রিনালিন হরমোন কোন অঙ্গ থেকে নিঃসৃত হয়?',
+    options: ['অ্যাড্রিনাল', 'পিটুইটারি', 'থাইরয়েড', 'প্যানক্রিয়াস'],
+    correct: [0],
+    explanation: 'অ্যাড্রিনালিন অ্যাড্রিনাল গ্রন্থি থেকে নিঃসৃত হয়।',
+    tags: ['biology','2012','endocrine']
+  },
+  {
+    id: 'BIO-2012-024',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানুষের লিঙ্গ নির্ধারণ কোন ক্রোমোজোম দ্বারা হয়?',
+    options: ['X ও Y', 'A ও B', 'C ও D', 'M ও N'],
+    correct: [0],
+    explanation: 'লিঙ্গ নির্ধারণ X ও Y ক্রোমোজোম দ্বারা হয়।',
+    tags: ['biology','2012','genetics']
+  },
+  {
+    id: 'BIO-2012-025',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'প্লেটলেটের প্রধান কাজ কী?',
+    options: ['রক্ত জমাট বাঁধা', 'রোগ প্রতিরোধ', 'অক্সিজেন পরিবহন', 'পুষ্টি শোষণ'],
+    correct: [0],
+    explanation: 'প্লেটলেট রক্ত জমাট বাঁধায় সাহায্য করে।',
+    tags: ['biology','2012','hematology']
+  },
+  {
+    id: 'CHEM-2012-026',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'HCl কোন ধরনের যৌগ?',
+    options: ['অম্ল', 'ক্ষার', 'আয়নিক', 'কোভালেন্ট'],
+    correct: [0],
+    explanation: 'HCl = অম্ল।',
+    tags: ['chemistry','2012','inorganic']
+  },
+  {
+    id: 'CHEM-2012-027',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'অ্যাসিটিক অ্যাসিডের সূত্র কী?',
+    options: ['CH₃COOH', 'C₂H₅OH', 'CH₄', 'C₂H₄'],
+    correct: [0],
+    explanation: 'অ্যাসিটিক অ্যাসিড = CH₃COOH।',
+    tags: ['chemistry','2012','organic']
+  },
+  {
+    id: 'CHEM-2012-028',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'প্রোটিনের মোনোমার কী?',
+    options: ['অ্যামিনো অ্যাসিড', 'নিউক্লিওটাইড', 'গ্লুকোজ', 'ফ্যাটি অ্যাসিড'],
+    correct: [0],
+    explanation: 'প্রোটিনের মোনোমার = অ্যামিনো অ্যাসিড।',
+    tags: ['chemistry','2012','biochemistry']
+  },
+  {
+    id: 'PHY-2012-029',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ৩ কেজি, ত্বরণ ৪ m/s² হলে বল কত?',
+    options: ['১২ N', '৭ N', '১০ N', '১৫ N'],
+    correct: [0],
+    explanation: 'F = ma → 3×4 = 12 N।',
+    tags: ['physics','2012','mechanics']
+  },
+  {
+    id: 'PHY-2012-030',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'দৈর্ঘ্য ২ মি তরঙ্গদৈর্ঘ্যের বেগ ৩৪০ m/s হলে ফ্রিকোয়েন্সি কত?',
+    options: ['১৭০ Hz', '৩৪০ Hz', '৩৪০০ Hz', '৮৫ Hz'],
+    correct: [0],
+    explanation: 'f = v/λ → 340/2 = 170 Hz।',
+    tags: ['physics','2012','waves']
+  },
+  {
+    id: 'PHY-2012-031',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'আলো প্রতিসরণের কোণ কোন আইন দ্বারা নির্দেশিত?',
+    options: ['আইনের প্রতিসরণ', 'আইনের প্রতিফলন', 'ডিফ্র্যাকশন', 'ডোপলার প্রভাব'],
+    correct: [0],
+    explanation: 'আলো প্রতিসরণের কোণ = আইনের প্রতিসরণ।',
+    tags: ['physics','2012','optics']
+  },
+  {
+    id: 'ENG-2012-032',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'I ____ finished my homework.',
+    options: ['have', 'has', 'had', 'having'],
+    correct: [0],
+    explanation: 'Present perfect tense: have finished।',
+    tags: ['english','2012','tense']
+  },
+  {
+    id: 'ENG-2012-033',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Angry” এর সমার্থক শব্দ কোনটি?',
+    options: ['Furious', 'Calm', 'Happy', 'Sad'],
+    correct: [0],
+    explanation: 'Angry = Furious।',
+    tags: ['english','2012','synonym']
+  },
+  {
+    id: 'ENG-2012-034',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Hot” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Cold', 'Warm', 'Cool', 'Freezing'],
+    correct: [0],
+    explanation: 'Hot ↔ Cold।',
+    tags: ['english','2012','antonym']
+  },
+  {
+    id: 'GK-2012-035',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের সর্বোচ্চ পর্বত কোনটি?',
+    options: ['সিতাকুণ্ড', 'সেন্ট মার্টিন', 'কক্সবাজার', 'সিতাকুণ্ড হিল'],
+    correct: [3],
+    explanation: 'বাংলাদেশের সর্বোচ্চ পর্বত সিতাকুণ্ড হিল।',
+    tags: ['gk','2012','bangladesh']
+  },
+  {
+    id: 'GK-2012-036',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে বড় মহাসাগর কোনটি?',
+    options: ['প্যাসিফিক', 'অ্যাটলান্টিক', 'ইন্ডিয়ান', 'আর্টিক'],
+    correct: [0],
+    explanation: 'প্যাসিফিক মহাসাগর সবচেয়ে বড়।',
+    tags: ['gk','2012','world']
+  },
+  {
+    id: 'BIO-2012-037',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিস কোন অংশে ঘটে?',
+    options: ['পাতা', 'মূল', 'ডাল', 'ফুল'],
+    correct: [0],
+    explanation: 'ফটোসিন্থেসিস প্রধানত পাতায় ঘটে।',
+    tags: ['biology','2012','plant-physiology']
+  },
+  {
+    id: 'CHEM-2012-038',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'হিলিয়াম নোবেল গ্যাস কি?',
+    options: ['হ্যাঁ', 'না', 'শুধু অক্সিজেন', 'শুধু হাইড্রোজেন'],
+    correct: [0],
+    explanation: 'হিলিয়াম নোবেল গ্যাস।',
+    tags: ['chemistry','2012','periodic']
+  },
+  {
+    id: 'PHY-2012-039',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ওহমের নিয়ম কোনটি বলে?',
+    options: ['I = V/R', 'V = IR²', 'P = IV', 'R = V+I'],
+    correct: [0],
+    explanation: 'ওহমের নিয়ম: I = V/R।',
+    tags: ['physics','2012','electricity']
+  },
+  {
+    id: 'PHY-2012-040',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ০°C তে কোন অবস্থায় থাকে?',
+    options: ['বাষ্প', 'বরফ/ঠান্ডা তরল', 'গরম', 'অপরিবর্তিত'],
+    correct: [1],
+    explanation: 'জল ০°C তে বরফ বা ঠান্ডা তরলের অবস্থায় থাকে।',
+    tags: ['physics','2012','thermodynamics']
+  },
+    {
+    id: 'BIO-2012-041',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'লিসোসোমের প্রধান কাজ কী?',
+    options: ['কচরাবর্জ্য ভাঙা', 'প্রোটিন সংশ্লেষ', 'শক্তি উৎপাদন', 'ডিএনএ সংরক্ষণ'],
+    correct: [0],
+    explanation: 'লিসোসোম কোষের আবর্জনা বা কচরাবর্জ্য ভাঙে।',
+    tags: ['biology','2012','cell-biology']
+  },
+  {
+    id: 'BIO-2012-042',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'রক্তচাপ নিয়ন্ত্রণে কোন অঙ্গ গুরুত্বপূর্ণ?',
+    options: ['কিডনি', 'ফুসফুস', 'লিভার', 'মস্তিষ্ক'],
+    correct: [0],
+    explanation: 'কিডনি রেনিন-এঞ্জিওটেনসিন সিস্টেমের মাধ্যমে রক্তচাপ নিয়ন্ত্রণ করে।',
+    tags: ['biology','2012','physiology']
+  },
+  {
+    id: 'BIO-2012-043',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'ইনসুলিন কোন অঙ্গ থেকে নিঃসৃত হয়?',
+    options: ['প্যানক্রিয়াস', 'থাইরয়েড', 'অ্যাড্রিনাল', 'পিটুইটারি'],
+    correct: [0],
+    explanation: 'ইনসুলিন প্যানক্রিয়াসের β-সেল থেকে নিঃসৃত হয়।',
+    tags: ['biology','2012','endocrine']
+  },
+  {
+    id: 'BIO-2012-044',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'ম্যান্ডেলের প্রথম নিয়ম কোনটি?',
+    options: ['সেগ্রিগেশন', 'ডমিন্যান্স', 'ইনডিপেনডেন্ট অ্যাসর্টমেন্ট', 'মিউটেশন'],
+    correct: [0],
+    explanation: 'ম্যান্ডেলের প্রথম নিয়ম = সেগ্রিগেশন রুল।',
+    tags: ['biology','2012','genetics']
+  },
+  {
+    id: 'BIO-2012-045',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'হিমোগ্লোবিনের কাজ কী?',
+    options: ['অক্সিজেন পরিবহন', 'রক্ত জমাট বাঁধা', 'রোগ প্রতিরোধ', 'পুষ্টি শোষণ'],
+    correct: [0],
+    explanation: 'হিমোগ্লোবিন রক্তে অক্সিজেন পরিবহন করে।',
+    tags: ['biology','2012','hematology']
+  },
+  {
+    id: 'CHEM-2012-046',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NH₃ কোন ধরনের যৌগ?',
+    options: ['ক্ষার', 'অম্ল', 'নিউট্রাল', 'লবণ'],
+    correct: [0],
+    explanation: 'NH₃ একটি ক্ষার।',
+    tags: ['chemistry','2012','inorganic']
+  },
+  {
+    id: 'CHEM-2012-047',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'মিথেনের সূত্র কী?',
+    options: ['CH₄', 'C₂H₆', 'C₂H₄', 'C₃H₈'],
+    correct: [0],
+    explanation: 'মিথেন = CH₄।',
+    tags: ['chemistry','2012','organic']
+  },
+  {
+    id: 'CHEM-2012-048',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'ডিএনএ-র স্ট্রাকচার কেমন?',
+    options: ['ডাবল হেলিক্স', 'সিঙ্গল স্ট্র্যান্ড', 'লুপ', 'ফোল্ডেড'],
+    correct: [0],
+    explanation: 'ডিএনএ-র স্ট্রাকচার = ডাবল হেলিক্স।',
+    tags: ['chemistry','2012','biochemistry']
+  },
+  {
+    id: 'PHY-2012-049',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'বেগ = কত?',
+    options: ['দূরত্ব ÷ সময়', 'বল ÷ ভর', 'শক্তি ÷ সময়', 'আয়তন ÷ সময়'],
+    correct: [0],
+    explanation: 'বেগ = দূরত্ব ÷ সময়।',
+    tags: ['physics','2012','mechanics']
+  },
+  {
+    id: 'PHY-2012-050',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'দৈর্ঘ্য ৫ মি তরঙ্গদৈর্ঘ্যের বেগ ৩৪০ m/s হলে ফ্রিকোয়েন্সি কত?',
+    options: ['৬৮ Hz', '৩৪০ Hz', '৫০ Hz', '১০০ Hz'],
+    correct: [0],
+    explanation: 'f = v/λ → 340/5 = 68 Hz।',
+    tags: ['physics','2012','waves']
+  },
+  {
+    id: 'PHY-2012-051',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলোর বিভাজন কী নামে?',
+    options: ['স্পেকট্রাম', 'প্রতিফলন', 'প্রতিসরণ', 'ডিফ্র্যাকশন'],
+    correct: [0],
+    explanation: 'প্রিজমে আলোর বিভাজন = স্পেকট্রাম।',
+    tags: ['physics','2012','optics']
+  },
+  {
+    id: 'ENG-2012-052',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'She ____ going to school.',
+    options: ['is', 'are', 'was', 'were'],
+    correct: [0],
+    explanation: 'Present continuous tense: is going।',
+    tags: ['english','2012','tense']
+  },
+  {
+    id: 'ENG-2012-053',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Quick” এর সমার্থক শব্দ কোনটি?',
+    options: ['Fast', 'Slow', 'Late', 'Weak'],
+    correct: [0],
+    explanation: 'Quick = Fast।',
+    tags: ['english','2012','synonym']
+  },
+  {
+    id: 'ENG-2012-054',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Happy” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Sad', 'Angry', 'Excited', 'Joyful'],
+    correct: [0],
+    explanation: 'Happy ↔ Sad।',
+    tags: ['english','2012','antonym']
+  },
+  {
+    id: 'GK-2012-055',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের জাতীয় ফুল কোনটি?',
+    options: ['শাপলা', 'গোলাপ', 'লিলি', 'চামেলি'],
+    correct: [0],
+    explanation: 'শাপলা বাংলাদেশের জাতীয় ফুল।',
+    tags: ['gk','2012','bangladesh']
+  },
+  {
+    id: 'GK-2012-056',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর সবচেয়ে গভীর মহাসাগর কোনটি?',
+    options: ['প্যাসিফিক', 'অ্যাটলান্টিক', 'ইন্ডিয়ান', 'আর্টিক'],
+    correct: [0],
+    explanation: 'প্যাসিফিক মহাসাগর সবচেয়ে গভীর।',
+    tags: ['gk','2012','world']
+  },
+  {
+    id: 'BIO-2012-057',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসে প্রধান আলো কোনটি লাগে?',
+    options: ['সূর্যালোক', 'চাঁদের আলো', 'ল্যাম্পের আলো', 'স্ট্রিট লাইট'],
+    correct: [0],
+    explanation: 'ফটোসিন্থেসিসের জন্য সূর্যালোক প্রয়োজন।',
+    tags: ['biology','2012','plant-physiology']
+  },
+  {
+    id: 'CHEM-2012-058',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'নোবেল গ্যাসের বৈশিষ্ট্য কী?',
+    options: ['অকার্যকর', 'ক্রিয়াশীল', 'অ্যাসিডিক', 'ক্ষারীয়'],
+    correct: [0],
+    explanation: 'নোবেল গ্যাস অকার্যকর।',
+    tags: ['chemistry','2012','periodic']
+  },
+  {
+    id: 'PHY-2012-059',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'ভোল্টেজ = কাজ ÷ চার্জ। এটিকে কী নামে জানি?',
+    options: ['ভোল্ট', 'ওহম', 'কুলম্ব', 'ওয়াট'],
+    correct: [0],
+    explanation: 'V = W/Q।',
+    tags: ['physics','2012','electricity']
+  },
+  {
+    id: 'PHY-2012-060',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'জল ১০০°C এ কোন অবস্থায় থাকে?',
+    options: ['বাষ্প', 'ঠান্ডা তরল', 'গরম', 'অপরিবর্তিত'],
+    correct: [0],
+    explanation: 'জল ১০০°C এ বাষ্পে রূপান্তরিত হয়।',
+    tags: ['physics','2012','thermodynamics']
+  },
+    {
+    id: 'BIO-2012-061',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'কোষের ঝিল্লি প্রধানত কী দিয়ে গঠিত?',
+    options: ['ফসফোলিপিড', 'প্রোটিন', 'কার্বোহাইড্রেট', 'নিউক্লিক অ্যাসিড'],
+    correct: [0],
+    explanation: 'কোষের ঝিল্লি প্রধানত ফসফোলিপিড দিয়ে গঠিত।',
+    tags: ['biology','2012','cell-biology']
+  },
+  {
+    id: 'BIO-2012-062',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'হৃদপিণ্ডে কতটি চেম্বার আছে?',
+    options: ['৪', '৩', '২', '৫'],
+    correct: [0],
+    explanation: 'হৃদপিণ্ডে ৪টি চেম্বার থাকে: ২টি এ্যাট্রিয়াম, ২টি ভেন্ট্রিকল।',
+    tags: ['biology','2012','physiology']
+  },
+  {
+    id: 'BIO-2012-063',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'থাইরয়েড হরমোনের প্রধান কাজ কী?',
+    options: ['মেটাবলিজম নিয়ন্ত্রণ', 'রক্তচাপ নিয়ন্ত্রণ', 'অক্সিজেন পরিবহন', 'রক্ত জমাট বাঁধা'],
+    correct: [0],
+    explanation: 'থাইরয়েড হরমোন দেহের মেটাবলিজম নিয়ন্ত্রণ করে।',
+    tags: ['biology','2012','endocrine']
+  },
+  {
+    id: 'BIO-2012-064',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'মানবদেহে মোট অটোসোমের সংখ্যা কত?',
+    options: ['৪৪', '৪৬', '৪২', '৪৮'],
+    correct: [0],
+    explanation: 'মানুষের ৪৪টি অটোসোম এবং ২টি লিঙ্গ ক্রোমোজোম থাকে।',
+    tags: ['biology','2012','genetics']
+  },
+  {
+    id: 'BIO-2012-065',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'রক্তের প্লাজমার প্রধান উপাদান কী?',
+    options: ['জল', 'প্রোটিন', 'শর্করা', 'লিপিড'],
+    correct: [0],
+    explanation: 'রক্তের প্লাজমার প্রায় ৯০% জল।',
+    tags: ['biology','2012','hematology']
+  },
+  {
+    id: 'CHEM-2012-066',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaCl কোন ধরনের যৌগ?',
+    options: ['আয়নিক', 'কোভালেন্ট', 'অম্ল', 'ক্ষার'],
+    correct: [0],
+    explanation: 'NaCl একটি আয়নিক যৌগ।',
+    tags: ['chemistry','2012','inorganic']
+  },
+  {
+    id: 'CHEM-2012-067',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথেনের সূত্র কী?',
+    options: ['C₂H₄', 'C₂H₆', 'CH₄', 'C₃H₈'],
+    correct: [0],
+    explanation: 'ইথেন = C₂H₄।',
+    tags: ['chemistry','2012','organic']
+  },
+  {
+    id: 'CHEM-2012-068',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'এনজাইমের প্রধান কাজ কী?',
+    options: ['ক্যাটালাইজ', 'শক্তি উৎপাদন', 'ডিএনএ সংরক্ষণ', 'লিপিড সংরক্ষণ'],
+    correct: [0],
+    explanation: 'এনজাইম রাসায়নিক প্রতিক্রিয়াকে দ্রুততর করে।',
+    tags: ['chemistry','2012','biochemistry']
+  },
+  {
+    id: 'PHY-2012-069',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'দ্রাঘিমা ত্বরণ এবং বলের মধ্যে সম্পর্ক কী?',
+    options: ['F = ma', 'F = m/v', 'F = v/t', 'F = m + a'],
+    correct: [0],
+    explanation: 'Newton’s Second Law: F = ma।',
+    tags: ['physics','2012','mechanics']
+  },
+  {
+    id: 'PHY-2012-070',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'ধ্বনির গতি নির্ভর করে কিসের উপর?',
+    options: ['মাধ্যমের ঘনত্ব ও তাপমাত্রা', 'ল্যাম্পের আলো', 'ফ্রিকোয়েন্সি', 'আয়তন'],
+    correct: [0],
+    explanation: 'ধ্বনির গতি পরিবেশের ঘনত্ব ও তাপমাত্রার উপর নির্ভর করে।',
+    tags: ['physics','2012','waves']
+  },
+  {
+    id: 'PHY-2012-071',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে আলো বিভাজিত হওয়ার পর কী তৈরি হয়?',
+    options: ['রঙিন স্পেকট্রাম', 'ডার্ক শেড', 'ল্যাম্পের আলো', 'শ্যাডো'],
+    correct: [0],
+    explanation: 'প্রিজম আলোকে রঙিন স্পেকট্রামে বিভাজিত করে।',
+    tags: ['physics','2012','optics']
+  },
+  {
+    id: 'ENG-2012-072',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'They ____ playing football.',
+    options: ['are', 'is', 'was', 'were'],
+    correct: [0],
+    explanation: 'Present continuous tense: are playing।',
+    tags: ['english','2012','tense']
+  },
+  {
+    id: 'ENG-2012-073',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Beautiful” এর সমার্থক শব্দ কোনটি?',
+    options: ['Pretty', 'Ugly', 'Bad', 'Small'],
+    correct: [0],
+    explanation: 'Beautiful = Pretty।',
+    tags: ['english','2012','synonym']
+  },
+  {
+    id: 'ENG-2012-074',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Easy” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Difficult', 'Hard', 'Simple', 'Soft'],
+    correct: [0],
+    explanation: 'Easy ↔ Difficult।',
+    tags: ['english','2012','antonym']
+  },
+  {
+    id: 'GK-2012-075',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের জাতীয় পশু কোনটি?',
+    options: ['রিংটেইল বানর', 'শিয়াল', 'হাতি', 'সিংহ'],
+    correct: [0],
+    explanation: 'রিংটেইল বানর বাংলাদেশের জাতীয় পশু।',
+    tags: ['gk','2012','bangladesh']
+  },
+  {
+    id: 'GK-2012-076',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর বৃহত্তম মরুভূমি কোনটি?',
+    options: ['সাহারা', 'গোবি', 'কালোহারি', 'তার'],
+    correct: [0],
+    explanation: 'সাহারা বিশ্বের বৃহত্তম মরুভূমি।',
+    tags: ['gk','2012','world']
+  },
+  {
+    id: 'BIO-2012-077',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'রুবিস্কো কোন প্রক্রিয়ার এনজাইম?',
+    options: ['ফটোসিন্থেসিস', 'শ্বাসপ্রশ্বাস', 'ডাইজেশন', 'ফার্টিলাইজেশন'],
+    correct: [0],
+    explanation: 'রুবিস্কো ফটোসিন্থেসিসে ব্যবহৃত হয়।',
+    tags: ['biology','2012','plant-physiology']
+  },
+  {
+    id: 'CHEM-2012-078',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'Li কোন গ্রুপের ধাতু?',
+    options: ['আলকালি মেটাল', 'অ্যালকালী আর্থ', 'ট্রানজিশন', 'হ্যালোজেন'],
+    correct: [0],
+    explanation: 'Li = আলকালি মেটাল।',
+    tags: ['chemistry','2012','periodic']
+  },
+  {
+    id: 'PHY-2012-079',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'প্রতিরোধের একক কী?',
+    options: ['ওহম', 'ভোল্ট', 'অ্যাম্পিয়ার', 'ওয়াট'],
+    correct: [0],
+    explanation: 'প্রতিরোধের একক = ওহম।',
+    tags: ['physics','2012','electricity']
+  },
+  {
+    id: 'PHY-2012-080',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'বাষ্পীভবনের সময় কি ঘটে?',
+    options: ['তাপ শোষণ', 'তাপ মুক্তি', 'কোনো পরিবর্তন নেই', 'চাপ বৃদ্ধি'],
+    correct: [0],
+    explanation: 'বাষ্পীভবনের সময় তাপ শোষণ হয়।',
+    tags: ['physics','2012','thermodynamics']
+  },
+    {
+    id: 'BIO-2012-081',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'কোষবিজ্ঞান',
+    question: 'মাইটোকন্ড্রিয়ার প্রধান কাজ কী?',
+    options: ['শক্তি উৎপাদন', 'প্রোটিন সংশ্লেষ', 'ডিএনএ সংরক্ষণ', 'রক্ত উৎপাদন'],
+    correct: [0],
+    explanation: 'মাইটোকন্ড্রিয়া শক্তি উৎপাদন করে (ATP)।',
+    tags: ['biology','2012','cell-biology']
+  },
+  {
+    id: 'BIO-2012-082',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'মানবদেহ',
+    question: 'লিভারের প্রধান কাজ কী?',
+    options: ['ডিটক্সিফিকেশন', 'শ্বাসপ্রশ্বাস', 'হরমোন নিঃসরণ', 'রক্তচাপ নিয়ন্ত্রণ'],
+    correct: [0],
+    explanation: 'লিভার দেহের বিষাক্ত পদার্থ ডিটক্সিফাই করে।',
+    tags: ['biology','2012','physiology']
+  },
+  {
+    id: 'BIO-2012-083',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হরমোন',
+    question: 'ক্যালসিটোনিন হরমোন কোন অঙ্গ থেকে নিঃসৃত হয়?',
+    options: ['থাইরয়েড', 'অ্যাড্রিনাল', 'প্যানক্রিয়াস', 'পিটুইটারি'],
+    correct: [0],
+    explanation: 'ক্যালসিটোনিন থাইরয়েডের C-সেল থেকে নিঃসৃত হয়।',
+    tags: ['biology','2012','endocrine']
+  },
+  {
+    id: 'BIO-2012-084',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'জেনেটিক্স',
+    question: 'একটি জেনের দুইটি ভেরিয়েন্টকে কী বলে?',
+    options: ['এলিল', 'ক্রোমোজোম', 'জিনোম', 'প্রোটিন'],
+    correct: [0],
+    explanation: 'জেনের দুইটি ভেরিয়েন্টকে এলিল বলে।',
+    tags: ['biology','2012','genetics']
+  },
+  {
+    id: 'BIO-2012-085',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'হেমাটোলজি',
+    question: 'লাল রক্তকণিকা কোন অঙ্গ থেকে উৎপন্ন হয়?',
+    options: ['বোন মেরু', 'লিভার', 'ফুসফুস', 'কিডনি'],
+    correct: [0],
+    explanation: 'লাল রক্তকণিকা বোন মেরুতে উৎপন্ন হয়।',
+    tags: ['biology','2012','hematology']
+  },
+  {
+    id: 'CHEM-2012-086',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'অম্ল-ক্ষার',
+    question: 'NaOH কোন ধরনের যৌগ?',
+    options: ['ক্ষার', 'অম্ল', 'নিউট্রাল', 'লবণ'],
+    correct: [0],
+    explanation: 'NaOH একটি ক্ষার।',
+    tags: ['chemistry','2012','inorganic']
+  },
+  {
+    id: 'CHEM-2012-087',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'জৈব',
+    question: 'ইথানলের সূত্র কী?',
+    options: ['C₂H₅OH', 'CH₄', 'C₂H₄', 'C₃H₈'],
+    correct: [0],
+    explanation: 'ইথানল = C₂H₅OH।',
+    tags: ['chemistry','2012','organic']
+  },
+  {
+    id: 'CHEM-2012-088',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'বায়োকেমিস্ট্রি',
+    question: 'এনজাইমের কার্যকারিতা কোনটির উপর নির্ভর করে?',
+    options: ['তাপমাত্রা ও pH', 'রঙ', 'গন্ধ', 'চাপ'],
+    correct: [0],
+    explanation: 'এনজাইমের কার্যকারিতা তাপমাত্রা ও pH-এর উপর নির্ভর করে।',
+    tags: ['chemistry','2012','biochemistry']
+  },
+  {
+    id: 'PHY-2012-089',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'মেকানিক্স',
+    question: 'ভর ৫ কেজি, ত্বরণ ২ m/s² → বল কত?',
+    options: ['১০ N', '৭ N', '৫ N', '১২ N'],
+    correct: [0],
+    explanation: 'F = ma → 5×2 = 10 N।',
+    tags: ['physics','2012','mechanics']
+  },
+  {
+    id: 'PHY-2012-090',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তরঙ্গ',
+    question: 'ধ্বনির কম্পন কত দ্বারা মাপা হয়?',
+    options: ['Hz', 'm/s', 'N', 'Pa'],
+    correct: [0],
+    explanation: 'ধ্বনির কম্পন ফ্রিকোয়েন্সি (Hz) দ্বারা মাপা হয়।',
+    tags: ['physics','2012','waves']
+  },
+  {
+    id: 'PHY-2012-091',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'আলোক',
+    question: 'প্রিজমে কোন প্রক্রিয়ায় আলো ভাঙে?',
+    options: ['প্রতিসরণ', 'প্রতিফলন', 'ডিফ্র্যাকশন', 'বিসরিত হয় না'],
+    correct: [0],
+    explanation: 'প্রিজমে আলো প্রতিসরণের মাধ্যমে ভাঙে।',
+    tags: ['physics','2012','optics']
+  },
+  {
+    id: 'ENG-2012-092',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Grammar',
+    question: 'He ____ finished his homework.',
+    options: ['has', 'have', 'had', 'having'],
+    correct: [0],
+    explanation: 'Present perfect tense: has finished।',
+    tags: ['english','2012','tense']
+  },
+  {
+    id: 'ENG-2012-093',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Vocabulary',
+    question: '“Smart” এর সমার্থক শব্দ কোনটি?',
+    options: ['Intelligent', 'Stupid', 'Lazy', 'Slow'],
+    correct: [0],
+    explanation: 'Smart = Intelligent।',
+    tags: ['english','2012','synonym']
+  },
+  {
+    id: 'ENG-2012-094',
+    class: 'Medical Admission',
+    subject: 'English',
+    topic: 'Antonym',
+    question: '“Strong” এর বিপরীতার্থক শব্দ কী?',
+    options: ['Weak', 'Soft', 'Light', 'Fragile'],
+    correct: [0],
+    explanation: 'Strong ↔ Weak।',
+    tags: ['english','2012','antonym']
+  },
+  {
+    id: 'GK-2012-095',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বাংলাদেশ',
+    question: 'বাংলাদেশের জাতীয় গাছ কোনটি?',
+    options: ['মহোগনি', 'বাঁশ', 'গাছ', 'পাইন'],
+    correct: [0],
+    explanation: 'মহোগনি বাংলাদেশের জাতীয় গাছ।',
+    tags: ['gk','2012','bangladesh']
+  },
+  {
+    id: 'GK-2012-096',
+    class: 'Medical Admission',
+    subject: 'General Knowledge',
+    topic: 'বিশ্ব',
+    question: 'পৃথিবীর বৃহত্তম দেশ কোনটি?',
+    options: ['রাশিয়া', 'চীন', 'ভারত', 'আমেরিকা'],
+    correct: [0],
+    explanation: 'রাশিয়া বিশ্বের বৃহত্তম দেশ।',
+    tags: ['gk','2012','world']
+  },
+  {
+    id: 'BIO-2012-097',
+    class: 'Medical Admission',
+    subject: 'Biology',
+    topic: 'উদ্ভিদবিজ্ঞান',
+    question: 'ফটোসিন্থেসিসের জন্য প্রধান গ্যাস কোনটি?',
+    options: ['CO₂', 'O₂', 'N₂', 'H₂'],
+    correct: [0],
+    explanation: 'ফটোসিন্থেসিসের জন্য CO₂ প্রয়োজন।',
+    tags: ['biology','2012','plant-physiology']
+  },
+  {
+    id: 'CHEM-2012-098',
+    class: 'Medical Admission',
+    subject: 'Chemistry',
+    topic: 'পর্যায় সারণি',
+    question: 'H কোন গ্রুপের মৌল?',
+    options: ['1', '2', '17', '18'],
+    correct: [0],
+    explanation: 'H = গ্রুপ 1 মৌল।',
+    tags: ['chemistry','2012','periodic']
+  },
+  {
+    id: 'PHY-2012-099',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'বিদ্যুৎ',
+    question: 'কারেন্ট = চার্জ ÷ সময়। এটিকে কী নামে জানি?',
+    options: ['অ্যাম্পিয়ার', 'ওহম', 'ভোল্ট', 'ওয়াট'],
+    correct: [0],
+    explanation: 'I = Q/t।',
+    tags: ['physics','2012','electricity']
+  },
+  {
+    id: 'PHY-2012-100',
+    class: 'Medical Admission',
+    subject: 'Physics',
+    topic: 'তাপগতিবিদ্যা',
+    question: 'গরম বস্তুর সাথে শীতল বস্তুর সংস্পর্শে কী ঘটে?',
+    options: ['তাপ স্থানান্তর', 'শব্দ উৎপাদন', 'চাপ বৃদ্ধি', 'কোনো পরিবর্তন নেই'],
+    correct: [0],
+    explanation: 'তাপ স্থানান্তর ঘটে।',
+    tags: ['physics','2012','thermodynamics']
+  }
+];
+
+
+  /*****************************************************
+   * Utilities
+   *****************************************************/
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const storage = {
+    get(key, fallback=null){ try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
+    set(key, value){ localStorage.setItem(key, JSON.stringify(value)); },
+    del(key){ localStorage.removeItem(key); }
+  };
+  const todayStr = () => new Date().toISOString().slice(0,10);
+  const shuffle = (arr) => arr.map(v=>[Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+
+  function groupBy(list, key){
+    return list.reduce((acc, item)=>{ const k=item[key]; (acc[k] ||= []).push(item); return acc; }, {});
+  }
+
+  /*****************************************************
+   * Router (hash-based)
+   *****************************************************/
+  const routes = ['home','classes','subjects','topics','exam','quiz','results'];
+  function setActiveTab(hash){
+    $$('#navTabs .tab').forEach(a=>a.classList.toggle('active', a.getAttribute('href') === hash));
+  }
+  function showView(id){
+    $$('section[data-view]').forEach(s=>s.hidden = (s.id !== id));
+  }
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.replace('#','') || 'home';
+    if (!routes.includes(id)) return;
+    setActiveTab('#'+id);
+    showView(id);
+  });
+
+  /*****************************************************
+   * Theme
+   *****************************************************/
+  const themeSelect = $('#themeSelect');
+  function applyTheme(mode){
+    const html = document.documentElement;
+    html.setAttribute('data-theme', mode);
+    themeSelect.value = mode;
+  }
+  function initTheme(){
+    const saved = storage.get('themeMode', 'system');
+    applyTheme(saved);
+    themeSelect.addEventListener('change', () => {
+      const v = themeSelect.value; storage.set('themeMode', v); applyTheme(v);
+    });
+  }
+
+  /*****************************************************
+   * Data Indexes (classes/subjects/topics)
+   *****************************************************/
+  const Index = {
+    classes: [], subjectsByClass: {}, topicsByClassSubject: {},
+    build(){
+      this.classes = [...new Set(QUESTION_DB.map(q=>q.class))].sort();
+      this.subjectsByClass = {};
+      for (const cls of this.classes){
+        const subjs = [...new Set(QUESTION_DB.filter(q=>q.class===cls).map(q=>q.subject))].sort();
+        this.subjectsByClass[cls] = subjs;
+        for (const s of subjs){
+          const topics = [...new Set(QUESTION_DB.filter(q=>q.class===cls && q.subject===s).map(q=>q.topic))].sort();
+          this.topicsByClassSubject[`${cls}__${s}`] = topics;
+        }
+      }
+    }
+  };
+
+  /*****************************************************
+   * Classes/Subjects/Topics UI
+   *****************************************************/
+  function renderClasses(){
+    const grid = $('#classesGrid'); grid.innerHTML='';
+    for (const cls of Index.classes){
+      const el = document.createElement('a'); el.href = '#subjects'; el.className='card';
+      el.innerHTML = `
+        <div class="thumb">${cls}</div>
+        <h3>${cls}</h3>
+        <p class="muted">${Index.subjectsByClass[cls].length} subjects</p>`;
+      el.addEventListener('click', ()=>{
+        storage.set('nav.class', cls);
+        $('#subjectsTitle').textContent = `Subjects — ${cls}`;
+        renderSubjects(cls);
+      });
+      grid.appendChild(el);
+    }
+  }
+  function renderSubjects(cls){
+    const grid = $('#subjectsGrid'); grid.innerHTML='';
+    for (const subj of Index.subjectsByClass[cls]){
+      const el = document.createElement('a'); el.href = '#topics'; el.className='card';
+      el.innerHTML = `
+        <div class="thumb">${subj}</div>
+        <h3>${subj}</h3>
+        <p class="muted">${Index.topicsByClassSubject[`${cls}__${subj}`].length} topics</p>`;
+      el.addEventListener('click', ()=>{
+        storage.set('nav.subject', subj);
+        $('#topicsTitle').textContent = `Topics — ${cls} / ${subj}`;
+        renderTopics(cls, subj);
+      });
+      grid.appendChild(el);
+    }
+  }
+  function renderTopics(cls, subj){
+    const grid = $('#topicsGrid'); grid.innerHTML='';
+    for (const topic of Index.topicsByClassSubject[`${cls}__${subj}`]){
+      const el = document.createElement('a'); el.href = '#exam'; el.className='card';
+      el.innerHTML = `
+        <div class="thumb">${topic}</div>
+        <h3>${topic}</h3>
+        <p class="muted">Start focused quiz</p>`;
+      el.addEventListener('click', ()=>{
+        // Prefill exam selectors
+        $('#examClass').value = cls; populateSubjects();
+        $('#examSubject').value = subj; populateTopics();
+        $('#examTopic').value = topic;
+      });
+      grid.appendChild(el);
+    }
+  }
+
+  /*****************************************************
+   * Exam selectors
+   *****************************************************/
+  function populateClasses(){
+    const sel = $('#examClass'); sel.innerHTML='';
+    for (const c of Index.classes){
+      const o = document.createElement('option'); o.value=o.textContent=c; sel.appendChild(o);
+    }
+  }
+  function populateSubjects(){
+    const cls = $('#examClass').value; const sel = $('#examSubject'); sel.innerHTML='';
+    for (const s of Index.subjectsByClass[cls]){ const o=document.createElement('option'); o.value=o.textContent=s; sel.appendChild(o); }
+  }
+  function populateTopics(){
+    const cls = $('#examClass').value; const subj = $('#examSubject').value; const sel = $('#examTopic'); sel.innerHTML='';
+    const topics = Index.topicsByClassSubject[`${cls}__${subj}`] || [];
+    const all = document.createElement('option'); all.value='*'; all.textContent='All Topics'; sel.appendChild(all);
+    for (const t of topics){ const o=document.createElement('option'); o.value=o.textContent=t; sel.appendChild(o); }
+  }
+
+  /*****************************************************
+   * Quiz Engine
+   *****************************************************/
+  const Quiz = {
+    mode: 'daily', // 'daily' | 'exam'
+    questions: [],
+    answers: {}, // qid -> [indices]
+    index: 0,
+    meta: {}, // class/subject/topic/count
+
+    start({ mode, questions, meta }){
+      this.mode = mode; this.questions = questions; this.answers = {}; this.index = 0; this.meta = meta||{};
+      $('#qTotal').textContent = questions.length;
+      $('#quizTitle').textContent = mode === 'daily' ? 'Daily Practice' : 'Exam';
+      location.hash = '#quiz';
+      this.render();
+    },
+    current(){ return this.questions[this.index]; },
+    render(){
+      const q = this.current(); if (!q) return;
+      $('#qIndex').textContent = this.index+1;
+      $('#questionText').innerHTML = q.question; // MathJax will typeset
+      const answersEl = $('#answers'); answersEl.innerHTML='';
+      const multiple = (q.correct && q.correct.length > 1);
+      const saved = this.answers[q.id] || [];
+      q.options.forEach((opt, i) => {
+        const id = `ans_${q.id}_${i}`;
+        const wrapper = document.createElement('label'); wrapper.className='answer';
+        wrapper.innerHTML = `
+          <input type="${multiple ? 'checkbox':'radio'}" name="q_${q.id}" id="${id}" value="${i}">
+          <div>${opt.replaceAll('<','&lt;').replaceAll('>','&gt;')}</div>`;
+        answersEl.appendChild(wrapper);
+        const input = wrapper.querySelector('input');
+        input.checked = saved.includes(i);
+        input.addEventListener('change', ()=>{
+          if (multiple){
+            const arr = new Set(this.answers[q.id]||[]);
+            input.checked ? arr.add(i) : arr.delete(i);
+            this.answers[q.id] = [...arr];
+          } else {
+            this.answers[q.id] = [i];
+          }
+        });
+      });
+      // hide explanation until evaluated
+      $('#explanation').style.display='none';
+      // Re-typeset MathJax when question changes
+      if (window.MathJax) MathJax.typesetPromise?.();
+    },
+    evaluate(){
+      let correct=0; const items=[];
+      for (const q of this.questions){
+        const chosen = new Set(this.answers[q.id]||[]);
+        const corr = new Set(q.correct||[]);
+        const ok = chosen.size === corr.size && [...chosen].every(i=>corr.has(i));
+        if (ok) correct++;
+        items.push({ id: q.id, ok, chosen:[...chosen], correct:[...corr] });
+      }
+      return { correct, total: this.questions.length, items };
+    },
+    showMarking(){
+      const q = this.current(); if (!q) return;
+      // decorate current answers
+      $$('#answers .answer').forEach((el, i)=>{
+        el.classList.remove('correct','wrong');
+        const chosen = (this.answers[q.id]||[]).includes(i);
+        const isCorr = (q.correct||[]).includes(i);
+        if (chosen && isCorr) el.classList.add('correct');
+        else if (chosen && !isCorr) el.classList.add('wrong');
+      });
+      const exp = $('#explanation'); exp.style.display='block'; exp.innerHTML = `<b>Explanation:</b> ${q.explanation}`;
+      if (window.MathJax) MathJax.typesetPromise?.();
+    }
+  };
+
+  // Quiz controls
+  $('#prevBtn').addEventListener('click', ()=>{ if (Quiz.index>0){ Quiz.index--; Quiz.render(); } });
+  $('#nextBtn').addEventListener('click', ()=>{ if (Quiz.index<Quiz.questions.length-1){ Quiz.index++; Quiz.render(); } });
+  $('#submitBtn').addEventListener('click', ()=>{
+    const result = Quiz.evaluate();
+    saveAttempt({
+      mode: Quiz.mode,
+      meta: Quiz.meta,
+      questions: Quiz.questions.map(q=>({ id:q.id, class:q.class, subject:q.subject, topic:q.topic })),
+      answers: Quiz.answers,
+      result,
+      at: Date.now()
+    });
+    if (Quiz.mode==='daily') markDailyDone();
+    renderResults();
+    location.hash = '#results';
+  });
+
+  /*****************************************************
+   * Daily logic
+   *****************************************************/
+  function dailyStatus(){
+    const d = storage.get('daily.date', '');
+    return d === todayStr();
+  }
+  function markDailyDone(){ storage.set('daily.date', todayStr()); }
+
+  function renderHome(){
+    const statusEl = $('#dailyStatus');
+    if (dailyStatus()){
+      statusEl.textContent = `Already completed today (${todayStr()}). Come back tomorrow.`;
+      $('#startDailyBtn').disabled = true;
+    } else {
+      statusEl.textContent = 'Ready for a new set!';
+      $('#startDailyBtn').disabled = false;
+    }
+    renderHomeChart();
+  }
+
+  $('#resetDaily').addEventListener('click', ()=>{ storage.del('daily.date'); renderHome(); });
+
+  const dailyDialog = $('#dailyDialog');
+  $('#startDailyBtn').addEventListener('click', async ()=>{
+    if (dailyStatus()) return;
+    if (typeof dailyDialog.showModal === 'function'){
+      const res = await new Promise(resolve=>{
+        dailyDialog.addEventListener('close', function onClose(){ dailyDialog.removeEventListener('close', onClose); resolve(dailyDialog.returnValue); });
+        dailyDialog.showModal();
+      });
+      if (res !== 'ok') return;
+    }
+    const questions = shuffle(QUESTION_DB).slice(0,10);
+    Quiz.start({ mode:'daily', questions, meta:{ kind:'daily', count:10 } });
+  });
+
+  /*****************************************************
+   * Exam start
+   *****************************************************/
+  $('#examClass').addEventListener('change', ()=>{ populateSubjects(); populateTopics(); });
+  $('#examSubject').addEventListener('change', ()=>{ populateTopics(); });
+  $('#startExamBtn').addEventListener('click', ()=>{
+    const cls = $('#examClass').value; const subj = $('#examSubject').value; const topic = $('#examTopic').value; const n = Math.max(5, Math.min(50, +$('#examCount').value||20));
+    let pool = QUESTION_DB.filter(q=>q.class===cls && q.subject===subj);
+    if (topic && topic !== '*') pool = pool.filter(q=>q.topic===topic);
+    const questions = shuffle(pool).slice(0, n);
+    Quiz.start({ mode:'exam', questions, meta:{ kind:'exam', class:cls, subject:subj, topic, count:n } });
+  });
+
+  /*****************************************************
+   * Results storage & charts
+   *****************************************************/
+  function saveAttempt(attempt){
+    const list = storage.get('attempts', []);
+    list.push(attempt);
+    storage.set('attempts', list);
+  }
+  function renderHomeChart(){
+    const list = storage.get('attempts', []).slice(-6);
+    const ctx = $('#homeSummaryChart').getContext('2d');
+    if (window._homeChart){ window._homeChart.destroy(); }
+    window._homeChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: list.map(a=>new Date(a.at).toLocaleDateString()),
+        datasets: [{ label:'Score', data: list.map(a=>Math.round(100*a.result.correct/a.result.total)) }]
+      },
+      options: { responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, max:100 } } }
+    });
+  }
+  function renderResults(){
+    // Trend chart
+    const attempts = storage.get('attempts', []);
+    const ctx = $('#resultsChart').getContext('2d');
+    if (window._resChart){ window._resChart.destroy(); }
+    window._resChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: attempts.map(a=>new Date(a.at).toLocaleString()),
+        datasets: [{ label:'% Score', data: attempts.map(a=>Math.round(100*a.result.correct/a.result.total)) }]
+      },
+      options: { responsive:true, scales:{ y:{ beginAtZero:true, max:100 } } }
+    });
+
+    // Attempts list
+    const listEl = $('#attemptsList'); listEl.innerHTML='';
+    attempts.slice().reverse().forEach((a, idx)=>{
+      const pct = Math.round(100*a.result.correct/a.result.total);
+      const card = document.createElement('div'); card.className='card';
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:.5rem;">
+          <div>
+            <div><b>${a.mode==='daily'?'Daily':'Exam'}</b> • ${new Date(a.at).toLocaleString()}</div>
+            <div class="muted">${a.meta?.class||''} ${a.meta?.subject?('• '+a.meta.subject):''} ${a.meta?.topic && a.meta.topic!=='*'?('• '+a.meta.topic):''}</div>
+          </div>
+          <div class="pill">Score: ${a.result.correct}/${a.result.total} (${pct}%)</div>
+        </div>`;
+      card.addEventListener('click', ()=>showAttempt(a));
+      listEl.appendChild(card);
+    });
+  }
+  function showAttempt(a){
+    $('#attemptDetail').hidden = false;
+    $('#attemptMeta').textContent = `${a.mode==='daily'?'Daily':'Exam'} • ${new Date(a.at).toLocaleString()} • ${a.result.correct}/${a.result.total}`;
+    const box = $('#attemptItems'); box.innerHTML='';
+    const byId = Object.fromEntries(QUESTION_DB.map(q=>[q.id,q]));
+    a.questions.forEach((qi, i)=>{
+      const q = byId[qi.id];
+      const chosen = new Set(a.answers[qi.id]||[]);
+      const corr = new Set((q.correct||[]));
+      const ok = chosen.size === corr.size && [...chosen].every(x=>corr.has(x));
+      const wrap = document.createElement('div'); wrap.className='card';
+      wrap.innerHTML = `
+        <div class="muted">Q${i+1} — ${qi.class} / ${qi.subject} / ${qi.topic}</div>
+        <div class="q-title">${q.question}</div>
+        <div class="answers">${q.options.map((opt, idx)=>{
+          const chosenCls = chosen.has(idx) ? (corr.has(idx)?'correct':'wrong') : '';
+          return `<div class="answer ${chosenCls}"><div class="kbd">${String.fromCharCode(65+idx)}</div><div>${opt.replaceAll('<','&lt;').replaceAll('>','&gt;')}</div></div>`;
+        }).join('')}</div>
+        <div style="margin-top:.5rem;" class="muted"><b>Explanation:</b> ${q.explanation}</div>`;
+      box.appendChild(wrap);
+    });
+    if (window.MathJax) MathJax.typesetPromise?.();
+  }
+
+  /*****************************************************
+   * Boot
+   *****************************************************/
+  function boot(){
+    initTheme();
+    Index.build();
+    renderClasses();
+    // Prefill first selections for Exam
+    populateClasses();
+    $('#examClass').addEventListener('change', ()=>{});
+    $('#examClass').value = Index.classes[0] || '';
+    populateSubjects();
+    $('#examSubject').value = Index.subjectsByClass[$('#examClass').value]?.[0] || '';
+    populateTopics();
+    $('#examTopic').value = '*';
+
+    renderHome();
+    renderResults();
+
+    // Initial route
+    const initial = location.hash.replace('#','') || 'home';
+    if (!routes.includes(initial)) location.hash = '#home';
+    setActiveTab('#'+(location.hash.replace('#','')||'home'));
+    showView(location.hash.replace('#','')||'home');
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+  </script>
+</body>
+</html>
