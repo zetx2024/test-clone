@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcard Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    canvas {
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      background: crimson;
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="flashcard" width="1080" height="1080"></canvas>
+
+  <div class="controls">
+    <button onclick="generateFlashcard()">Generate Flashcard</button>
+    <button onclick="downloadFlashcard()">Download Flashcard</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("flashcard");
+    const ctx = canvas.getContext("2d");
+
+    // Placeholder logo (replace later)
+    const logoUrl = "https://proshtuti.com/img/logo-dark.png";
+    const fbLogo = "https://upload.wikimedia.org/wikipedia/commons/1/16/Facebook-icon-1.png";
+   // const instaLogo = "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png";
+
+    const questions = [
+      {
+        q: "What is the synonym of the word 'Abandon'?",
+        options: ["Leave", "Hold", "Keep", "Secure"]
+      },
+      {
+        q: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Venus", "Mars", "Jupiter"]
+      },
+      {
+        q: "Who developed the theory of relativity?",
+        options: ["Isaac Newton", "Albert Einstein", "Nikola Tesla", "Galileo Galilei"]
+      }
+    ];
+
+    function getRandomColor() {
+      const colors = ["#e63946", "#000000", "#ffffff", "#1d3557", "#457b9d", "#2a9d8f", "#ffb703"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    async function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    async function generateFlashcard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Random background gradient
+      const color1 = getRandomColor();
+      const color2 = getRandomColor();
+      const gradient = ctx.createLinearGradient(0, 0, 1080, 1080);
+      gradient.addColorStop(0, color1);
+      gradient.addColorStop(1, color2);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw header logo
+      const logo = await loadImage(logoUrl);
+      ctx.drawImage(logo, canvas.width / 2 - 60, 40, 120, 120);
+
+      // Header text
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 48px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Per Day Question", canvas.width / 2, 200);
+
+      // Pick random question
+      const question = questions[Math.floor(Math.random() * questions.length)];
+
+      // Draw question
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 44px Arial";
+      wrapText(ctx, question.q, 540, 320, 900, 60);
+
+      // Draw options as buttons
+      ctx.font = "36px Arial";
+      const startY = 500;
+      question.options.forEach((opt, i) => {
+        const y = startY + i * 100;
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(290, y - 40, 500, 70);
+        ctx.fillText(opt, 540, y + 10);
+      });
+
+      // Footer
+      ctx.font = "28px Arial";
+      ctx.textAlign = "left";
+      ctx.fillText("https://proshtuti.com/", 60, 1000);
+
+      const fb = await loadImage(fbLogo);
+      ctx.drawImage(fb, 760, 960, 40, 40);
+      ctx.fillText("@myproshtuti", 810, 990);
+
+      
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(" ");
+      let line = "";
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + " ";
+        const metrics = context.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          context.fillText(line, x, y);
+          line = words[n] + " ";
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      context.fillText(line, x, y);
+    }
+
+    function downloadFlashcard() {
+      const link = document.createElement("a");
+      link.download = Date.now() + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    // Generate first card on load
+    generateFlashcard();
+  </script>
+</body>
+</html>
+
+//const insta = await loadImage(instaLogo);
+      ctx.drawImage(insta, 760, 1010, 40, 40);
+      ctx.fillText("@yourinstagram", 810, 1040);
